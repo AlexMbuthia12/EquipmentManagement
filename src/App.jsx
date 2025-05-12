@@ -1,12 +1,19 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
+import Dashboard from "./pages/user/Dashboard/index";
+
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <div className="bg-red-950 w-full h-full"><p className="text-3xl">Hello world</p></div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
