@@ -20,7 +20,7 @@ import {
 
 export default function MyBookings() {
   const [activeTab, setActiveTab] = useState("active");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); y
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
   // Modern color theme inspired by Dribbble (matching the dashboard)
   const colors = {
