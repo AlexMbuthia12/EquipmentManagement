@@ -1,414 +1,321 @@
 import { useState } from "react";
 import {
-  Menu,
-  X,
   Home,
   Calendar,
   History,
-  Package,
   User,
   Settings,
   LogOut,
-  ChevronRight,
-  ChevronLeft,
   Bell,
+  Search,
+  Heart,
+  Eye,
+  BookOpen,
+  Grid,
+  Menu,
+  X
 } from "lucide-react";
-import PROJECTOR from "../../../Assets/Images/PROJECTOR.jpeg";
-import PSBHALL from "../../../Assets/Images/PSB.png";
-import Screen from "../../../Assets/Images/Screen.jpeg";
-import Camera from "../../../Assets/Images/Camera.jpeg";
+import PSB from '../../../Assets/Images/PSB.png'
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("all");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-
-export default function UserSidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  // Color theme based on provided colors
+  // Modern color theme inspired by Dribbble
   const colors = {
-    easternBlue: "#1e81b0", // Primary
-    greenWhite: "#eeeee4", // Background
-    burntSienna: "#e28743", // Accent
-    tacao: "#eab676", // Light accent
-    glacier: "#76b5c5", // Secondary
-    eternity: "#21130d", // Dark text
-    burntUmber: "#873e23", // Dark accent
-    powderBlue: "#abdbe3", // Light secondary
-    catalinaBlue: "#063970", // Dark primary
-    chathamsBlue: "#154c79", // Medium primary
+    primary: "#0d6efd",
+    secondary: "#7749f8",
+    background: "#f8f9fa",
+    cardBg: "#ffffff",
+    textDark: "#212529",
+    textMuted: "#6c757d",
+    accent: "#ff5c85",
+    success: "#10b981",
+    warning: "#fbbf24",
+    danger: "#ef4444",
+    purple: "#8b5cf6",
+    border: "#e9ecef"
   };
 
-  const menuItems = [
-    { icon: <Home size={20} />, name: "Dashboard", badge: false },
-    { icon: <Calendar size={20} />, name: "My Bookings", badge: 3 },
-    { icon: <History size={20} />, name: "History", badge: false },
-    { icon: <User size={20} />, name: "Profile", badge: false },
-    // { icon: <Settings size={20} />, name: 'Settings', badge: false },
+  // Equipment items
+  const equipmentItems = [
+    { 
+      name: "PSB HALL", 
+      status: "available", 
+      statusColor: colors.success, 
+      description: "Large event space with stage and seating for 200 people",
+      likes: 556,
+      views: "218k" 
+    },
+    { 
+      name: "PROJECTOR", 
+      status: "unavailable", 
+      statusColor: colors.danger, 
+      description: "High-definition digital projector with HDMI connection",
+      likes: 606,
+      views: "239k" 
+    },
+    { 
+      name: "SCREEN", 
+      status: "maintenance", 
+      statusColor: colors.warning, 
+      description: "Portable projection screen with adjustable height",
+      likes: 980,
+      views: "634k" 
+    },
+    // { 
+    //   name: "CAMERA", 
+    //   status: "borrowed", 
+    //   statusColor: colors.purple, 
+    //   description: "Professional DSLR camera with video capabilities",
+    //   likes: 449,
+    //   views: "141k" 
+    // },
+    { 
+      name: "OFFICIAL SEATS", 
+      status: "available", 
+      statusColor: colors.success, 
+      description: "Ergonomic office chairs for events and meetings",
+      likes: 325,
+      views: "98k" 
+    },
   ];
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+  const getStatusText = (status) => {
+    switch(status) {
+      case "available": return "Available";
+      case "unavailable": return "Not Available";
+      case "maintenance": return "Under Maintenance";
+      case "borrowed": return "Currently Borrowed";
+      default: return status;
+    }
   };
 
-  const toggleMobileSidebar = () => {
-    setIsMobileOpen(!isMobileOpen);
+  const getButtonColor = (status) => {
+    switch(status) {
+      case "available": return colors.primary;
+      case "unavailable": return colors.textMuted;
+      case "maintenance": return colors.warning;
+      case "borrowed": return colors.purple;
+      default: return colors.textMuted;
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Mobile menu button - visible on smaller screens */}
-      <button
-        className="fixed z-50 top-4 left-4 p-2 bg-white rounded-md shadow-md md:hidden"
-        onClick={toggleMobileSidebar}
-      >
-        <Menu size={24} color={colors.catalinaBlue} />
-      </button>
-
-      {/* Mobile overlay */}
-      {isMobileOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-          onClick={toggleMobileSidebar}
-        />
-      )}
-
-      {/* Sidebar - changes with screen size */}
-      <div
-        className={`fixed md:relative z-50 h-full transition-all duration-300 ease-in-out
-                   ${isCollapsed ? "w-20" : "w-64"} 
-                   ${isMobileOpen ? "left-0" : "-left-full md:left-0"}`}
-      >
-        <div className="h-full flex flex-col bg-white shadow-lg">
-          {/* Header section */}
-          <div
-            className="flex items-center justify-between p-4"
-            style={{ backgroundColor: colors.catalinaBlue }}
-          >
+    <div className="min-h-screen bg-gray-50">
+      {/* Top Navigation */}
+      <nav className="bg-white shadow-sm border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            {/* Logo */}
             <div className="flex items-center">
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: colors.glacier }}
-              >
-                <User size={24} color="white" />
+              <div className="flex-shrink-0 flex items-center">
+                <h1 className="text-xl font-bold text-gray-800">ASSETFLOW</h1>
               </div>
-              {!isCollapsed && (
-                <div className="ml-3 text-white">
-                  <p className="font-semibold">John Doe</p>
-                  <p className="text-xs opacity-80">User</p>
-                </div>
-              )}
-            </div>
-
-            {/* Close button for mobile */}
-            <button
-              className="text-white md:hidden"
-              onClick={toggleMobileSidebar}
-            >
-              <X size={24} />
-            </button>
-
-            {/* Collapse button for desktop */}
-            <button
-              className="hidden md:block text-white"
-              onClick={toggleSidebar}
-            >
-              {isCollapsed ? (
-                <ChevronRight size={20} />
-              ) : (
-                <ChevronLeft size={20} />
-              )}
-            </button>
-          </div>
-
-          {/* Navigation menu */}
-          <nav
-            className="flex-1 overflow-y-auto py-4"
-            style={{ backgroundColor: colors.greenWhite }}
-          >
-            <ul className="space-y-2 px-3">
-              {menuItems.map((item, index) => (
-                <li key={index}>
+              
+              {/* Desktop Navigation */}
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                {[
+                  { name: "Dashboard", active: true },
+                  { name: "My Bookings", badge: 3 },
+                  { name: "History" }
+                  
+                ].map((item, index) => (
                   <a
+                    key={index}
                     href="#"
-                    className={`flex items-center px-3 py-3 rounded-md hover:bg-gray-100 transition-colors
-                             ${index === 0 ? "bg-gray-100" : ""}`}
-                    style={{ color: colors.eternity }}
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium transition-colors 
+                      ${item.active 
+                        ? "text-blue-600 border-b-2 border-blue-500" 
+                        : "text-gray-500 hover:text-gray-700 hover:border-b-2 hover:border-gray-300"}`}
                   >
-                    <div
-                      className="flex items-center justify-center"
-                      style={{ color: colors.easternBlue }}
-                    >
-                      {item.icon}
-                    </div>
-                    {!isCollapsed && (
-                      <div className="ml-3 flex-1 flex justify-between items-center">
-                        <span>{item.name}</span>
-                        {item.badge && (
-                          <span
-                            className="px-2 py-1 text-xs rounded-full text-white"
-                            style={{ backgroundColor: colors.burntSienna }}
-                          >
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
+                    {item.name}
+                    {item.badge && (
+                      <span className="ml-2 px-2 py-0.5 text-xs rounded-full text-white bg-blue-500">
+                        {item.badge}
+                      </span>
                     )}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Notifications section */}
-          <div className="p-4 border-t border-gray-200">
-            <div
-              className="flex items-center p-3 rounded-md"
-              style={{ backgroundColor: colors.powderBlue }}
-            >
-              <Bell size={20} style={{ color: colors.catalinaBlue }} />
-              {!isCollapsed && (
-                <div className="ml-3">
-                  <p
-                    className="text-sm font-medium"
-                    style={{ color: colors.catalinaBlue }}
-                  >
-                    2 New Notifications
-                  </p>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side navigation */}
+            <div className="flex items-center space-x-4">
+              {/* Search */}
+              <div className="hidden md:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-200">
+                <input 
+                  type="text" 
+                  placeholder="Search equipment..." 
+                  className="bg-transparent border-none outline-none text-sm flex-1 w-40"
+                />
+                <Search size={18} className="text-gray-400" />
+              </div>
+              
+              {/* Notification & User */}
+              <div className="flex items-center space-x-4">
+                <button className="relative p-2 rounded-full hover:bg-gray-50">
+                  <Bell size={20} className="text-gray-600" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                
+                {/* Profile Dropdown */}
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                    <User size={18} className="text-white" />
+                  </div>
                 </div>
-              )}
+              </div>
+              
+              {/* Mobile menu button */}
+              <div className="flex items-center sm:hidden">
+                <button
+                  onClick={toggleMobileMenu}
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+                >
+                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Footer section */}
-          <div
-            className="p-4 border-t border-gray-200"
-            style={{ backgroundColor: colors.greenWhite }}
-          >
-            <a
-              href="#"
-              className="flex items-center p-2 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              <LogOut size={20} style={{ color: colors.burntUmber }} />
-              {!isCollapsed && (
-                <span className="ml-3" style={{ color: colors.burntUmber }}>
-                  Logout
-                </span>
-              )}
-            </a>
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="sm:hidden">
+            <div className="pt-2 pb-3 space-y-1">
+              {[
+                "Dashboard",
+                "My Bookings",
+                "History",
+                "Profile",
+                "Settings",
+                "Logout"
+              ].map((item, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="text-gray-500 hover:bg-gray-50 hover:text-gray-700 block px-3 py-2 text-base font-medium"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </nav>
 
-      {/* Main content area - just a placeholder */}
-      <div className="flex-1 p-10 ml-0 md:ml-0 transition-all duration-300">
-        <div className="p-4 rounded-lg bg-white shadow mb-6">
-          <h1
-            className="text-2xl font-bold"
-            style={{ color: colors.catalinaBlue }}
-          >
-            Equipment Booking System
-          </h1>
-          <p className="text-gray-600">
-            Welcome to your dashboard! This is the main content area that would
-            display your booking information.
-          </p>
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Equipment Dashboard</h1>
+          <p className="text-gray-500">Browse and book equipment across various categories</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  <div className="bg-white p-6 rounded-lg shadow relative">
-    {/* Status Icon */}
-    <div className="absolute top-3 right-3">
-      <div className="flex items-center">
-        <div className="h-3 w-3 rounded-full bg-green-500 mr-1"></div>
-        <span className="text-xs text-gray-600">Available</span>
-      </div>
-    </div>
-    
-    {/* Image Division */}
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-      <img 
-        src={PSBHALL} 
-        alt="PSB HALL" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2"
-      style={{ color: colors.easternBlue }}
-    >
-      PSB HALL
-    </h2>
-    <p className="text-sm text-gray-600 mb-4">Your recent equipment bookings would appear here.</p>
-    
-    {/* Borrow Button */}
-    <button 
-      className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
-      style={{ backgroundColor: colors.easternBlue }}
-    >
-      Borrow Now
-    </button>
-  </div>
-  
-  <div className="bg-white p-6 rounded-lg shadow relative">
-    {/* Status Icon */}
-    <div className="absolute top-3 right-3">
-      <div className="flex items-center">
-        <div className="h-3 w-3 rounded-full bg-red-500 mr-1"></div>
-        <span className="text-xs text-gray-600">Not Available</span>
-      </div>
-    </div>
-    
-    {/* Image Division */}
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-      <img 
-        src={PROJECTOR} 
-        alt="PROJECTOR" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2"
-      style={{ color: colors.easternBlue }}
-    >
-      PROJECTOR
-    </h2>
-    <p className="text-sm text-gray-600 mb-4">Your recent equipment bookings would appear here.</p>
-    
-    {/* Borrow Button */}
-    <button 
-      className="w-full py-2 px-4 bg-gray-400 text-white rounded-md cursor-not-allowed"
-    >
-      Not Available
-    </button>
-  </div>
-  
-  <div className="bg-white p-6 rounded-lg shadow relative">
-    {/* Status Icon */}
-    <div className="absolute top-3 right-3">
-      <div className="flex items-center">
-        <div className="h-3 w-3 rounded-full bg-yellow-500 mr-1"></div>
-        <span className="text-xs text-gray-600">Under Maintenance</span>
-      </div>
-    </div>
-    
-    {/* Image Division */}
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-      <img 
-        src={Screen}
-        alt="SCREEN" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2"
-      style={{ color: colors.easternBlue }}
-    >
-      WHITE  BOARD SCREEN
-    </h2>
-    <p className="text-sm text-gray-600 mb-4">Available equipment for booking would be listed here.</p>
-    
-    {/* Borrow Button */}
-    <button 
-      className="w-full py-2 px-4 bg-yellow-500 text-white rounded-md cursor-not-allowed"
-    >
-      Under Maintenance
-    </button>
-  </div>
-  
-  <div className="bg-white p-6 rounded-lg shadow relative">
-    {/* Status Icon */}
-    <div className="absolute top-3 right-3">
-      <div className="flex items-center">
-        <div className="h-3 w-3 rounded-full bg-purple-500 mr-1"></div>
-        <span className="text-xs text-gray-600">Borrowed</span>
-      </div>
-    </div>
-    
-    {/* Image Division */}
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-      <img 
-        src={Camera} 
-        alt="CAMERA" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2"
-      style={{ color: colors.easternBlue }}
-    >
-      CAMERA
-    </h2>
-    <p className="text-sm text-gray-600 mb-4">Your recent equipment bookings would appear here.</p>
-    
-    {/* Borrow Button */}
-    <button 
-      className="w-full py-2 px-4 bg-purple-500 text-white rounded-md cursor-not-allowed"
-    >
-      Currently Borrowed
-    </button>
-  </div>
-  
-  <div className="bg-white p-6 rounded-lg shadow relative">
-    {/* Status Icon */}
-    <div className="absolute top-3 right-3">
-      <div className="flex items-center">
-        <div className="h-3 w-3 rounded-full bg-green-500 mr-1"></div>
-        <span className="text-xs text-gray-600">Available</span>
-      </div>
-    </div>
-    
-    {/* Image Division */}
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-      <img 
-        src="/api/placeholder/300/200" 
-        alt="OFFICIAL SEATS" 
-        className="w-full h-full object-cover"
-      />
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2"
-      style={{ color: colors.easternBlue }}
-    >
-      OFFICIAL SEATS
-    </h2>
-    <p className="text-sm text-gray-600 mb-4">Available equipment for booking would be listed here.</p>
-    
-    {/* Borrow Button */}
-    <button 
-      className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
-      style={{ backgroundColor: colors.easternBlue }}
-    >
-      Borrow Now
-    </button>
-  </div>
-   
-  <div className="bg-white p-6 rounded-lg shadow">
-    <div className="mb-4 h-40 bg-gray-100 rounded-md flex items-center justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-      </svg>
-    </div>
-    
-    <h2
-      className="text-lg font-semibold mb-2 text-center"
-      style={{ color: colors.easternBlue }}
-    >
-      View More
-    </h2>
-    <p className="text-sm text-gray-600 mb-4 text-center">Browse all available equipment for booking</p>
-    
-    <button 
-      className="w-full py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-200"
-    >
-      See All Equipment
-    </button>
-  </div>
-</div>
-      </div>
+
+        {/* Status Tabs */}
+        <div className="mb-8 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            {["all", "available", "borrowed", "maintenance"].map((tab) => (
+              <button
+                key={tab}
+                className={`py-4 px-1 text-sm font-medium border-b-2 transition-colors ${
+                  activeTab === tab
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Stats summary */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          {[
+            { label: "Total Equipment", value: "86", icon: <BookOpen size={20} />, color: "bg-blue-50 text-blue-500" },
+            { label: "Available Now", value: "42", icon: <Calendar size={20} />, color: "bg-green-50 text-green-500" },
+            { label: "Currently Borrowed", value: "24", icon: <User size={20} />, color: "bg-purple-50 text-purple-500" },
+            { label: "Under Maintenance", value: "12", icon: <Settings size={20} />, color: "bg-yellow-50 text-yellow-500" }
+          ].map((stat, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center">
+                <div className={`w-12 h-12 rounded-lg ${stat.color} flex items-center justify-center`}>
+                  {stat.icon}
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-gray-500 text-sm">{stat.label}</h3>
+                  <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Equipment Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {equipmentItems.map((item, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
+              {/* Equipment Image */}
+              <div className="h-48 bg-gray-100 relative">
+                <img 
+                  src={PSB} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute top-3 right-3 bg-white rounded-full px-3 py-1 text-xs font-medium shadow-sm flex items-center">
+                  <div className={`h-2 w-2 rounded-full mr-1`} style={{ backgroundColor: item.statusColor }}></div>
+                  {getStatusText(item.status)}
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="p-5">
+                <h3 className="text-lg font-bold text-gray-800 mb-2">{item.name}</h3>
+                <p className="text-sm text-gray-500 mb-4">{item.description}</p>
+                
+                {/* <div className="flex justify-between items-center mb-4">
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Heart size={14} className="mr-1" />
+                    {item.likes}
+                  </div>
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Eye size={14} className="mr-1" />
+                    {item.views}
+                  </div>
+                </div> */}
+                
+                <button 
+                  className="w-full py-2 px-4 rounded-lg text-white text-sm font-medium transition-colors"
+                  style={{ 
+                    backgroundColor: item.status === "available" ? colors.primary : getButtonColor(item.status),
+                    cursor: item.status === "available" ? "pointer" : "not-allowed"
+                  }}
+                >
+                  {item.status === "available" ? "Borrow Now" : getStatusText(item.status)}
+                </button>
+              </div>
+            </div>
+          ))}
+          
+          {/* View more card */}
+          {/* <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow flex flex-col items-center justify-center p-6">
+            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+              <Grid size={24} className="text-blue-500" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">View More</h3>
+            <p className="text-sm text-gray-500 mb-4 text-center">Browse all available equipment for booking</p>
+            <button className="py-2 px-4 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-colors">
+              See All Equipment
+            </button>
+          </div> */}
+        </div>
+      </main>
     </div>
   );
 }
-Dash
