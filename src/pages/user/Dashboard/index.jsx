@@ -11,6 +11,7 @@ import {
 
 // Import the Navbar component
 import Navbar from "../../Both/Navbar/Navbar";
+import PSB from "../../../Assets/Images/PSB.png";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("all");
@@ -41,7 +42,7 @@ export default function Dashboard() {
       description: "Large event space with stage and seating for 200 people",
       likes: 556,
       views: "218k",
-      imgUrl: "/api/placeholder/400/320" 
+      imgUrl:(PSB),
     },
     { 
       name: "PROJECTOR", 

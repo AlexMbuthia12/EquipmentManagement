@@ -11,7 +11,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/account/mybookings" element={<MyBookings />} />
+        <Route path="account/mybookings" element={<MyBookings />} />
         {/* <Route path="/history" element={<HistoryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
