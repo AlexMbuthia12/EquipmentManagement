@@ -7,6 +7,7 @@ import {
   Menu,
   X
 } from "lucide-react";
+import SearchComponent from "../Search/index"
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,6 +23,10 @@ export default function Navbar() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  const handleResultSelect = (result) => {
+    // Handle the selected result, e.g., navigate to a page
+    console.log("Selected:", result);
   };
 
   return (
@@ -64,14 +69,19 @@ export default function Navbar() {
           {/* Right side navigation */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-            <div className="hidden md:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-200">
+            {/* <div className="hidden md:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-200">
               <input 
                 type="text" 
                 placeholder="Search equipment..." 
                 className="bg-transparent border-none outline-none text-sm flex-1 w-40"
               />
               <Search size={18} className="text-gray-400" />
-            </div>
+            </div> */}
+            <SearchComponent 
+        onResultSelect={handleResultSelect}
+        placeholder="Search equipment..."
+        className="w-64" // Optional custom width
+      />
             
             {/* Notification & User */}
             <div className="flex items-center space-x-4">
