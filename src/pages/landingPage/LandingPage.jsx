@@ -33,7 +33,7 @@ const LandingPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await axios.post("", {
         email,
         password,
       });
@@ -109,10 +109,10 @@ const LandingPage = () => {
         </div>
 
         <button
-          onClick={handleLogin}
           className={`border-2 border-[#154c79] w-4/5 max-w-md p-2  text-white bg-[#154c79] rounded-lg font-bold hover:bg-transparent hover:text-[#154c79] transition-all duration-500
             ${isloading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
           type="submit"
+          disabled={isloading}
         >
           {isloading ? "Sending..." : "Login"}
         </button>
