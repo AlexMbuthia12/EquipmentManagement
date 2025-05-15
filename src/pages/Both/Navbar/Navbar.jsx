@@ -13,7 +13,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Dashboard", path: "/" },
+    { name: "Dashboard", path: "/Dashboard" },
     { name: "My Bookings", path: "/account/mybookings", badge: 3 },
     { name: "History", path: "/history" },
     { name: "Profile", path: "/profile", mobileOnly: true },

@@ -13,7 +13,7 @@ export default function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Landing/>} />
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="account/mybookings" element={<MyBookings />} />
           {/* <Route path="/history" element={<HistoryPage />} />
