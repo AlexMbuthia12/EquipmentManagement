@@ -8,12 +8,12 @@ import {
   X
 } from "lucide-react";
 import SearchComponent from "../Search/index"
-
+import NotificationComponent from "../Notification/index"
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Dashboard", path: "/Dashboard" },
+    { name: "Dashboard", path: "/" },
     { name: "My Bookings", path: "/account/mybookings", badge: 3 },
     { name: "History", path: "/history" },
     { name: "Profile", path: "/profile", mobileOnly: true },
@@ -23,10 +23,6 @@ export default function Navbar() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-  const handleResultSelect = (result) => {
-    // Handle the selected result, e.g., navigate to a page
-    console.log("Selected:", result);
   };
 
   return (
@@ -77,18 +73,11 @@ export default function Navbar() {
               />
               <Search size={18} className="text-gray-400" />
             </div> */}
-            <SearchComponent 
-        onResultSelect={handleResultSelect}
-        placeholder="Search equipment..."
-        className="w-64" // Optional custom width
-      />
+            <SearchComponent/>
             
             {/* Notification & User */}
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 rounded-full hover:bg-gray-50">
-                <Bell size={20} className="text-gray-600" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+                 < NotificationComponent/>
               
               {/* Profile Dropdown */}
               <div className="relative">
