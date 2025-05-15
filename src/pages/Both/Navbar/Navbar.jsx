@@ -7,7 +7,6 @@ import {
   Menu,
   X
 } from "lucide-react";
-import logo from "../../../Assets/Images/logo.jpeg"
 import SearchComponent from "../Search/index"
 import NotificationComponent from "../Notification/index"
 export default function Navbar() {
@@ -34,12 +33,9 @@ export default function Navbar() {
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="flex items-center">
-              <img
-  src={logo} // Replace with your actual image path
-  alt="Profile"
-  className="w-8 h-8 rounded-md mr-2 object-cover"
-/>
-
+                <div className="w-8 h-8 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
+                  <span className="text-white font-bold">AF</span>
+                </div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">ASSETFLOW</h1>
               </Link>
             </div>
