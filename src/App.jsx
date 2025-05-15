@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/user/Dashboard/index";
 import Landing from "./pages/landingPage/LandingPage";
 import MyBookings from "./pages/user/Orders/MyBookings";
+import ProfilePage from "./pages/Both/Account/Profile"
 import { Toaster } from "react-hot-toast";
 // import HistoryPage from "./components/HistoryPage";
 // import ProfilePage from "./components/ProfilePage";
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/" element={<Landing/>} />
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="account/mybookings" element={<MyBookings />} />
+          <Route path="/profile" element={<ProfilePage />} />
           {/* <Route path="/history" element={<HistoryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
