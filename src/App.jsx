@@ -4,6 +4,7 @@ import Landing from "./pages/landingPage/LandingPage";
 import MyBookings from "./pages/user/Orders/MyBookings";
 import ProfilePage from "./pages/Both/Account/Profile"
 import { Toaster } from "react-hot-toast";
+import Footer from "./pages//Both/Footer/Footer"
 // import HistoryPage from "./components/HistoryPage";
 // import ProfilePage from "./components/ProfilePage";
 // import SettingsPage from "./components/SettingsPage";
@@ -22,7 +23,9 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/borrow/:id" element={<BorrowPage />} /> */}
+      
         </Routes>
+        <Footer/>
       </Router>
 
       <Toaster position="top-right" />

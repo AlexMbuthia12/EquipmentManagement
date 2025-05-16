@@ -14,7 +14,7 @@ import {
   Shield,
   ChevronRight
 } from "lucide-react";
-
+import Navbar from "../../Both/Navbar/Navbar";
 export default function ProfilePage({ userData = defaultUserData }) {
   const [activeTab, setActiveTab] = useState("personal");
   
@@ -23,7 +23,9 @@ export default function ProfilePage({ userData = defaultUserData }) {
   };
 
   return (
+    
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+         <Navbar/>
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {/* Profile Header */}
         <div className="relative">
@@ -51,8 +53,12 @@ export default function ProfilePage({ userData = defaultUserData }) {
               <button className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow hover:bg-gray-100">
                 <Edit size={16} className="text-gray-700" />
               </button>
-            </div>
+              </div>
+              <br/>
+              
+           
           </div>
+        
           
           {/* Edit Profile Button */}
           <div className="flex justify-end p-4 pt-16">
