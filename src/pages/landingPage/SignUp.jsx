@@ -5,16 +5,20 @@ import toast from "react-hot-toast";
 import axios from "axios";
 const LandingPage = () => {
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
+  const [department, setDepartment] = useState("");
   const [isloading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setshowConfirmPassword] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // validation
-    if (!email || !password) {
+    if (!userName || !email || !password || !confirmpassword) {
       toast.error("Please fill in all fields");
       setIsLoading(false);
       return;
@@ -30,14 +34,20 @@ const LandingPage = () => {
       return;
     }
 
+    if (password.trim() !== confirmpassword.trim()) {
+      toast.error("Passwords don't match");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const response = await axios.post("", {
+        userName,
         email,
         password,
       });
-      toast.success("Login successful!");
+      toast.success("SignUp successful!");
     } catch (error) {
       toast.error("Login failed. Check your credentials.");
       if (error.response) {
@@ -54,10 +64,23 @@ const LandingPage = () => {
   return (
     <main className="login-main w-screen h-screen overflow-hidden flex flex-col justify-center items-center">
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSignUp}
         className="flex flex-col items-center  max-w-xl w-3/4 pb-8 pt-8 pr-4 pl-4 rounded-lg"
-        action=""
       >
+        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+          <input
+            type="name"
+            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            required
+            onBlur={(e) =>
+              e.target.classList.toggle("filled", e.target.value !== "")
+            }
+          />
+          <div className="labeline">Enter your name</div>
+        </div>
+
         <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
           <input
             type="email"
@@ -69,7 +92,7 @@ const LandingPage = () => {
               e.target.classList.toggle("filled", e.target.value !== "")
             }
           />
-          <div className="labeline">Enter your name</div>
+          <div className="labeline">Enter your email</div>
         </div>
 
         <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
@@ -98,13 +121,53 @@ const LandingPage = () => {
           )}
         </div>
 
+        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+          <input
+            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
+            type={showConfirmPassword ? "text" : "password"}
+            value={confirmpassword}
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onBlur={(e) =>
+              e.target.classList.toggle("filled", e.target.value !== "")
+            }
+          />
+          <div className="labeline">Confirm Password</div>
+          {confirmpassword.length > 0 && (
+            <div
+              onClick={() => setshowConfirmPassword((prev) => !prev)}
+              className="w-4 h-4 absolute top-[35%] translate-y-0.5 right-[5%] cursor-pointer"
+            >
+              {showConfirmPassword ? (
+                <EyeClosed className="text-[#154c79]" />
+              ) : (
+                <Eye className="text-[#154c79]" />
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+          <input
+            type="text"
+            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            required
+            onBlur={(e) =>
+              e.target.classList.toggle("filled", e.target.value !== "")
+            }
+          />
+          <div className="labeline">Enter Department</div>
+        </div>
+
         <div className="flex items-center gap-2 max-w-md w-4/5 pb-2">
           <input
             className="cursor-pointer w-5 h-5 border-none outline-none"
             type="checkbox"
           />
-          <label className="text-[#154c79] font-bold" htmlFor="">
-            Remember me
+          <label className="text-[#154c79]" htmlFor="">
+            Admin
           </label>
         </div>
 
@@ -114,7 +177,7 @@ const LandingPage = () => {
           type="submit"
           disabled={isloading}
         >
-          {isloading ? "Sending..." : "Login"}
+          {isloading ? "Signing up..." : "Sign Up"}
         </button>
       </form>
     </main>
