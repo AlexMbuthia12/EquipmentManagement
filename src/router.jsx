@@ -6,10 +6,9 @@ import NotfoundPage from "../NotFound.jsx";
 import Unauthorized from "../Unauthorized.jsx";
 
 // admin routes
-const Dashboard = lazy(() => import("./pages/user/Dashboard/index"));
-// import Dashboard from "./pages/Dashboard/index";
 
 // user routes
+const Dashboard = lazy(() => import("./pages/user/Dashboard/index"));
 const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings"));
 
 // general routes
