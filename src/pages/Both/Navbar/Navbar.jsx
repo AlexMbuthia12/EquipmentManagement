@@ -7,12 +7,13 @@ import {
   Menu,
   X
 } from "lucide-react";
-
+import SearchComponent from "../Search/index"
+import NotificationComponent from "../Notification/index"
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: "Dashboard", path: "/" },
+    { name: "Dashboard", path: "/Dashboard" },
     { name: "My Bookings", path: "/account/mybookings", badge: 3 },
     { name: "History", path: "/history" },
     { name: "Profile", path: "/profile", mobileOnly: true },
@@ -64,21 +65,19 @@ export default function Navbar() {
           {/* Right side navigation */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-            <div className="hidden md:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-200">
+            {/* <div className="hidden md:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-gray-200">
               <input 
                 type="text" 
                 placeholder="Search equipment..." 
                 className="bg-transparent border-none outline-none text-sm flex-1 w-40"
               />
               <Search size={18} className="text-gray-400" />
-            </div>
+            </div> */}
+            <SearchComponent/>
             
             {/* Notification & User */}
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 rounded-full hover:bg-gray-50">
-                <Bell size={20} className="text-gray-600" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+                 < NotificationComponent/>
               
               {/* Profile Dropdown */}
               <div className="relative">
