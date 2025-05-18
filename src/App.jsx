@@ -3,10 +3,8 @@ import Dashboard from "./pages/user/Dashboard/index";
 import Landing from "./pages/landingPage/LandingPage";
 import MyBookings from "./pages/user/Orders/MyBookings";
 import { Toaster } from "react-hot-toast";
-// import HistoryPage from "./components/HistoryPage";
-// import ProfilePage from "./components/ProfilePage";
-// import SettingsPage from "./components/SettingsPage";
-// import BorrowPage from "./components/BorrowPage";
+import RegisterPage from "./pages/landingPage/RegisterPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 export default function App() {
   return (
@@ -14,12 +12,11 @@ export default function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        {/*<Route path="/login" element={<LoginPage />} />*/}
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="account/mybookings" element={<MyBookings />} />
-          {/* <Route path="/history" element={<HistoryPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/borrow/:id" element={<BorrowPage />} /> */}
         </Routes>
       </Router>
 

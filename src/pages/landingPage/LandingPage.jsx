@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import "./landing.css";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "axios"; 
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 const LandingPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isloading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  // added a isAdmin state to track whether the user is logging in as an admin
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,11 +40,27 @@ const LandingPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("", {
+      // const response = await axios.post("", {
+      //   email,
+      //   password,
+      // });
+
+      // When making the login request we'll include isAdmin in the payload
+      const response = await axios.post("http://localhost:7000/api/login", {
         email,
         password,
+        isAdmin,
       });
+
       toast.success("Login successful!");
+      if (response.data.user.role === "admin") {
+  // Redirect to admin dashboard
+  navigate("/admin");
+} else {
+  // Redirect to user dashboard
+  navigate("/user-dashboard");
+}
+
     } catch (error) {
       toast.error("Login failed. Check your credentials.");
       if (error.response) {
@@ -108,6 +131,21 @@ const LandingPage = () => {
           </label>
         </div>
 
+
+           {/* added an admin checkbox labeled “Login as Admin” just below the "Remember me" option */}
+          <div className="flex items-center gap-2 max-w-md w-4/5 pb-2">
+          <input
+           className="cursor-pointer w-5 h-5 border-none outline-none"
+           type="checkbox"
+           checked={isAdmin}
+           onChange={() => setIsAdmin(!isAdmin)}
+           />
+           <label className="text-[#154c79] font-bold" htmlFor="">
+            Login as Admin
+           </label>
+           </div>
+
+
         <button
           className={`border-2 border-[#154c79] w-4/5 max-w-md p-2  text-white bg-[#154c79] rounded-lg font-bold hover:bg-transparent hover:text-[#154c79] transition-all duration-500
             ${isloading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
@@ -116,6 +154,13 @@ const LandingPage = () => {
         >
           {isloading ? "Sending..." : "Login"}
         </button>
+
+        <div className="mt-4 text-[#154c79] font-medium">
+  Don’t have an account?{" "}
+  <Link to="/register" className="text-[#154c79] underline hover:text-blue-800">
+    Sign up
+  </Link>
+</div>
       </form>
     </main>
   );
