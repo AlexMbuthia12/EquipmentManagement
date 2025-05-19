@@ -1,7 +1,7 @@
 // components/layouts/Layout.jsx
 import { Outlet, useLocation } from "react-router-dom";
-import Navbar from "../shared/Navbar";
-import Sidebar from "../shared/Sidebar";
+import Navbar from "./pages/Both/Navbar/Navbar";
+// import Sidebar from "../shared/Sidebar";
 
 const Layout = () => {
   const { pathname } = useLocation();
@@ -10,13 +10,12 @@ const Layout = () => {
   const hideNav = pathname === "/" || pathname === "/signup";
 
   return (
-    <div className="app-layout">
+    <div className="">
       {!hideNav && <Navbar />}
-      <div className="flex">
-        {!hideNav && <Sidebar />}
-        <main className="flex-1 p-4">
-          <Outlet />
-        </main>
+      <div className="">
+        {/* {!hideNav && <Sidebar />} */}
+
+        <Outlet />
       </div>
     </div>
   );

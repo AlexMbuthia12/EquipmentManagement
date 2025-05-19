@@ -1,41 +1,72 @@
 import React, { useState } from "react";
-import "./landing.css";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
-const LandingPage = () => {
-  const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const [department, setDepartment] = useState("");
-  const [isloading, setIsLoading] = useState(false);
+
+const SignUp = ({ setIsLogin }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    userName: "",
+    password: "",
+    confirmPassword: "",
+    department: "",
+    role: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setshowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error for that field
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+    const { userName, email, password, confirmPassword, department, role } =
+      formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // validation
-    if (!userName || !email || !password || !confirmpassword) {
-      toast.error("Please fill in all fields");
-      setIsLoading(false);
-      return;
+    let newErrors = {};
+
+    if (!userName.trim()) newErrors.userName = "Full name is required.";
+    if (!email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Please enter a valid email address.";
     }
 
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address");
-      return;
+    if (!password) {
+      newErrors.password = "Password is required.";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
     }
 
-    if (password.trim() === "") {
-      toast.error("Password is required.");
-      return;
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password.";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
     }
 
-    if (password.trim() !== confirmpassword.trim()) {
-      toast.error("Passwords don't match");
+    if (!department.trim()) newErrors.department = "Department is required.";
+    if (!role) newErrors.role = "Role is required.";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      toast.error("Please fix the highlighted fields.");
       return;
     }
 
@@ -46,142 +77,214 @@ const LandingPage = () => {
         userName,
         email,
         password,
+        department,
+        role,
       });
-      toast.success("SignUp successful!");
+
+      toast.success(
+        "Signup successful! Await admin approval. Redirecting to login..."
+      );
+
+      // clear the inputs
+      setFormData({
+        email: "",
+        userName: "",
+        password: "",
+        confirmPassword: "",
+        department: "",
+        role: "",
+      });
+
+      // clear the errors
+      setErrors({});
+
+      setTimeout(() => setIsLogin(true), 5000);
     } catch (error) {
-      toast.error("Login failed. Check your credentials.");
-      if (error.response) {
-        console.error("Server response error:", error.response);
-      } else if (error.request) {
-        console.log("No response from server");
-      } else {
-        console.log("Error insetting up the request");
-      }
+      toast.error("Signup failed");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
-    <main className="login-main w-screen h-screen overflow-hidden flex flex-col justify-center items-center">
-      <form
-        onSubmit={handleSignUp}
-        className="flex flex-col items-center  max-w-xl w-3/4 pb-8 pt-8 pr-4 pl-4 rounded-lg"
-      >
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+    <form
+      onSubmit={handleSignUp}
+      className="w-full max-w-md flex flex-col gap-5 text-[#006b3c]"
+    >
+      <div>
+        <h2 className="text-2xl font-bold">Create an Account</h2>
+        <p className="text-sm mt-1">
+          Fill the form below to request an account.
+        </p>
+      </div>
+
+      {/* Name & Email */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col gap-1 w-full lg:w-1/2">
+          <label htmlFor="userName" className="text-sm font-semibold">
+            Full Name
+          </label>
           <input
-            type="name"
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            required
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
+            autoComplete="off"
+            id="userName"
+            name="userName"
+            type="text"
+            value={formData.userName}
+            onChange={handleInputChange}
+            placeholder="e.g. John Doe"
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.userName ? "border-red-500" : "border-[#006b3c]"
+            }`}
           />
-          <div className="labeline">Enter your name</div>
+          <p className="text-xs text-red-500 min-h-[1rem]">{errors.userName}</p>
         </div>
 
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+        <div className="flex flex-col gap-1 w-full lg:w-1/2">
+          <label htmlFor="email" className="text-sm font-semibold">
+            E-mail
+          </label>
           <input
+            autoComplete="off"
+            id="email"
+            name="email"
             type="email"
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder="e.g. user@example.com"
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.email ? "border-red-500" : "border-[#006b3c]"
+            }`}
           />
-          <div className="labeline">Enter your email</div>
+          <p className="text-xs text-red-500 min-h-[1rem]">{errors.email}</p>
         </div>
+      </div>
 
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+      {/* Password & Confirm Password */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col gap-1 w-full lg:w-1/2 relative">
+          <label htmlFor="password" className="text-sm font-semibold">
+            Password
+          </label>
           <input
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
+            autoComplete="off"
+            id="password"
+            name="password"
             type={showPassword ? "text" : "password"}
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Enter password"
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.password ? "border-red-500" : "border-[#006b3c]"
+            }`}
           />
-          <div className="labeline">Enter your Password</div>
-          {password.length > 0 && (
-            <div
+          {formData.password && (
+            <span
+              className="absolute right-3 top-9 cursor-pointer"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="w-4 h-4 absolute top-[35%] translate-y-0.5 right-[5%] cursor-pointer"
             >
               {showPassword ? (
-                <EyeClosed className="text-[#154c79]" />
+                <EyeClosed className="text-[#006b3c]" size={18} />
               ) : (
-                <Eye className="text-[#154c79]" />
+                <Eye className="text-[#006b3c]" size={18} />
               )}
-            </div>
+            </span>
           )}
+          <p className="text-xs text-red-500 min-h-[1rem]">{errors.password}</p>
         </div>
 
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
+        <div className="flex flex-col gap-1 w-full lg:w-1/2 relative">
+          <label htmlFor="confirmPassword" className="text-sm font-semibold">
+            Confirm Password
+          </label>
           <input
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
+            autoComplete="off"
+            id="confirmPassword"
+            name="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
-            value={confirmpassword}
-            required
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            placeholder="Repeat password"
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.confirmPassword ? "border-red-500" : "border-[#006b3c]"
+            }`}
           />
-          <div className="labeline">Confirm Password</div>
-          {confirmpassword.length > 0 && (
-            <div
-              onClick={() => setshowConfirmPassword((prev) => !prev)}
-              className="w-4 h-4 absolute top-[35%] translate-y-0.5 right-[5%] cursor-pointer"
+          {formData.confirmPassword && (
+            <span
+              className="absolute right-3 top-9 cursor-pointer"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
             >
               {showConfirmPassword ? (
-                <EyeClosed className="text-[#154c79]" />
+                <EyeClosed className="text-[#006b3c]" size={18} />
               ) : (
-                <Eye className="text-[#154c79]" />
+                <Eye className="text-[#006b3c]" size={18} />
               )}
-            </div>
+            </span>
           )}
+          <p className="text-xs text-red-500 min-h-[1rem]">
+            {errors.confirmPassword}
+          </p>
         </div>
+      </div>
 
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
-          <input
-            type="text"
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            required
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
-          />
-          <div className="labeline">Enter Department</div>
-        </div>
-
-        <div className="flex items-center gap-2 max-w-md w-4/5 pb-2">
-          <input
-            className="cursor-pointer w-5 h-5 border-none outline-none"
-            type="checkbox"
-          />
-          <label className="text-[#154c79]" htmlFor="">
-            Admin
+      {/* Department & Role */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col gap-1 w-full lg:w-1/2">
+          <label htmlFor="department" className="text-sm font-semibold">
+            Department
           </label>
+          <input
+            autoComplete="off"
+            id="department"
+            name="department"
+            type="text"
+            value={formData.department}
+            onChange={handleInputChange}
+            placeholder="e.g. ICT"
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.department ? "border-red-500" : "border-[#006b3c]"
+            }`}
+          />
+          <p className="text-xs text-red-500 min-h-[1rem]">
+            {errors.department}
+          </p>
         </div>
 
-        <button
-          className={`border-2 border-[#154c79] w-4/5 max-w-md p-2  text-white bg-[#154c79] rounded-lg font-bold hover:bg-transparent hover:text-[#154c79] transition-all duration-500
-            ${isloading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-          type="submit"
-          disabled={isloading}
-        >
-          {isloading ? "Signing up..." : "Sign Up"}
-        </button>
-      </form>
-    </main>
+        <div className="flex flex-col gap-1 w-full lg:w-1/2">
+          <label htmlFor="role" className="text-sm font-semibold">
+            Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
+            className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+              errors.role ? "border-red-500" : "border-[#006b3c]"
+            }`}
+          >
+            <option value="" disabled>
+              Select Role
+            </option>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+          <p className="text-xs text-red-500 min-h-[1rem]">{errors.role}</p>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`cursor-pointer mt-2 w-full bg-[#006b3c] text-white font-semibold py-2 rounded-md transition-all duration-300 hover:bg-transparent hover:text-[#006b3c] border-2 border-[#006b3c] ${
+          isLoading && "opacity-50 cursor-not-allowed"
+        }`}
+      >
+        {isLoading ? "Signing up..." : "Sign Up"}
+      </button>
+    </form>
   );
 };
 
-export default LandingPage;
+export default SignUp;

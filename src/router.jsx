@@ -1,9 +1,11 @@
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ProtectedRoute from "./auth/ProtectedRoutes.jsx";
+import Layout from "./Layout.jsx";
 
 import NotfoundPage from "../NotFound.jsx";
 import Unauthorized from "../Unauthorized.jsx";
+import PageLoader from "./PageLoader.jsx";
 
 // admin routes
 
@@ -12,8 +14,7 @@ const Dashboard = lazy(() => import("./pages/user/Dashboard/index"));
 const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings"));
 
 // general routes
-const Login = lazy(() => import("./pages/landingPage/Login"));
-const SignUp = lazy(() => import("./pages/landingPage/SignUp"));
+const AuthPage = lazy(() => import("./pages/landingPage/LandingPage.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -25,18 +26,11 @@ const router = createBrowserRouter([
         path: "/",
         element: (
           <Suspense fallback={<PageLoader />}>
-            <Login />
+            <AuthPage />
           </Suspense>
         ),
       },
-      {
-        path: "/signup",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <SignUp />
-          </Suspense>
-        ),
-      },
+
       {
         path: "/dashboard",
         element: (
