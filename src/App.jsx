@@ -1,26 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/user/Dashboard/index";
-import Landing from "./pages/landingPage/LandingPage";
-import MyBookings from "./pages/user/Orders/MyBookings";
+// App.jsx
+import { RouterProvider } from "react-router-dom";
+import router from "./router.jsx";
 import { Toaster } from "react-hot-toast";
-import RegisterPage from "./pages/landingPage/RegisterPage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 
-export default function App() {
+function App() {
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-        {/*<Route path="/login" element={<LoginPage />} />*/}
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="account/mybookings" element={<MyBookings />} />
-        </Routes>
-      </Router>
-
+      <RouterProvider router={router} />
       <Toaster position="top-right" />
     </>
   );
 }
+
+export default App;
