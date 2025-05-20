@@ -1,2 +1,7 @@
 @import "tailwindcss";
+/* Reset default margin/padding */
+html, body {
+  margin: 0;
+  padding: 0;
+}
 

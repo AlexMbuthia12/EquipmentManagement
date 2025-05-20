@@ -1,167 +1,91 @@
 import React, { useState } from "react";
-import "./landing.css";
-import { EyeClosed, Eye } from "lucide-react";
-import toast from "react-hot-toast";
-import axios from "axios"; 
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import ForgotPassword from "./ForgotPassword";
 
 const LandingPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isloading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  // added a isAdmin state to track whether the user is logging in as an admin
-  const [isAdmin, setIsAdmin] = useState(false);
-  const navigate = useNavigate();
+  const [currentView, setCurrentView] = useState("login"); // "login" | "signup" | "forgot"
 
+  const isLogin = currentView === "login";
+  const isSignUp = currentView === "signup";
+  const isForgot = currentView === "forgot";
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    // validation
-    if (!email || !password) {
-      toast.error("Please fill in all fields");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!emailRegex.test(email)) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-
-    if (password.trim() === "") {
-      toast.error("Password is required.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      // const response = await axios.post("", {
-      //   email,
-      //   password,
-      // });
-
-      // When making the login request we'll include isAdmin in the payload
-      const response = await axios.post("http://localhost:7000/api/login", {
-        email,
-        password,
-        isAdmin,
-      });
-
-      toast.success("Login successful!");
-      if (response.data.user.role === "admin") {
-  // Redirect to admin dashboard
-  navigate("/admin");
-} else {
-  // Redirect to user dashboard
-  navigate("/user-dashboard");
-}
-
-    } catch (error) {
-      toast.error("Login failed. Check your credentials.");
-      if (error.response) {
-        console.error("Server response error:", error.response);
-      } else if (error.request) {
-        console.log("No response from server");
-      } else {
-        console.log("Error insetting up the request");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
   return (
-    <main className="login-main w-screen h-screen overflow-hidden flex flex-col justify-center items-center">
-      <form
-        onSubmit={handleLogin}
-        className="flex flex-col items-center  max-w-xl w-3/4 pb-8 pt-8 pr-4 pl-4 rounded-lg"
-        action=""
-      >
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
-          <input
-            type="email"
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
-          />
-          <div className="labeline">Enter your name</div>
-        </div>
+    <main className="min-h-screen flex flex-col justify-center items-center pb-6 xl:flex-row xl:justify-between">
+      {/* Left info panel - show only on xl screens */}
+      <div className="w-1/2 hidden xl:flex flex-col justify-center items-start bg-[#006b3c] text-white p-12 min-h-screen">
+        <h2 className="text-3xl font-bold mb-4">
+          {isLogin
+            ? "Welcome Back!"
+            : isForgot
+            ? "Reset Your Password"
+            : "Welcome to the AssetFlow 👋"}
+        </h2>
+        <p className="mb-3">
+          {isLogin
+            ? "Log in to access your dashboard and manage bookings."
+            : isForgot
+            ? "Enter your email and we’ll send instructions to reset your password."
+            : "Reserve and borrow departmental equipment easily. After signing up, await admin approval before login."}
+        </p>
+        {isSignUp && (
+          <p className="italic text-sm">
+            You’ll receive an email once your account is activated.
+          </p>
+        )}
+      </div>
 
-        <div className=" max-w-md w-4/5 relative mb-6 rounded-lg">
-          <input
-            className="w-full p-4 bg-transparent border-2 border-[#154c79] text-[#154c79] outline-none border-color-seven rounded-lg font-bold"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={(e) =>
-              e.target.classList.toggle("filled", e.target.value !== "")
-            }
-          />
-          <div className="labeline">Enter your Password</div>
-          {password.length > 0 && (
-            <div
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="w-4 h-4 absolute top-[35%] translate-y-0.5 right-[5%] cursor-pointer"
-            >
-              {showPassword ? (
-                <EyeClosed className="text-[#154c79]" />
-              ) : (
-                <Eye className="text-[#154c79]" />
-              )}
-            </div>
+      {/* Right form area */}
+      <div className="flex flex-col items-center w-full xl:w-1/2 max-w-xl px-6 py-10">
+        <h1 className="text-2xl font-bold mb-6 xl:hidden">
+          {isLogin
+            ? "Login to Your Account"
+            : isForgot
+            ? "Forgot Password"
+            : "Create an Account"}
+        </h1>
+
+        {isLogin && <Login onForgot={() => setCurrentView("forgot")} />}
+        {isSignUp && <SignUp setIsLogin={() => setCurrentView("login")} />}
+        {isForgot && (
+          <ForgotPassword setToLogin={() => setCurrentView("login")} />
+        )}
+
+        {/* Toggle form links */}
+        <p className="mt-4 text-sm text-center">
+          {isLogin ? (
+            <>
+              Don’t have an account?{" "}
+              <button
+                className="text-[#006b3c] hover:underline cursor-pointer"
+                onClick={() => setCurrentView("signup")}
+              >
+                Sign Up
+              </button>
+            </>
+          ) : isSignUp ? (
+            <>
+              Already have an account?{" "}
+              <button
+                className="text-[#006b3c] hover:underline cursor-pointer"
+                onClick={() => setCurrentView("login")}
+              >
+                Login
+              </button>
+            </>
+          ) : (
+            <>
+              Remembered your password?{" "}
+              <button
+                className="text-[#006b3c] hover:underline cursor-pointer"
+                onClick={() => setCurrentView("login")}
+              >
+                Back to Login
+              </button>
+            </>
           )}
-        </div>
-
-        <div className="flex items-center gap-2 max-w-md w-4/5 pb-2">
-          <input
-            className="cursor-pointer w-5 h-5 border-none outline-none"
-            type="checkbox"
-          />
-          <label className="text-[#154c79] font-bold" htmlFor="">
-            Remember me
-          </label>
-        </div>
-
-
-           {/* added an admin checkbox labeled “Login as Admin” just below the "Remember me" option */}
-          <div className="flex items-center gap-2 max-w-md w-4/5 pb-2">
-          <input
-           className="cursor-pointer w-5 h-5 border-none outline-none"
-           type="checkbox"
-           checked={isAdmin}
-           onChange={() => setIsAdmin(!isAdmin)}
-           />
-           <label className="text-[#154c79] font-bold" htmlFor="">
-            Login as Admin
-           </label>
-           </div>
-
-
-        <button
-          className={`border-2 border-[#154c79] w-4/5 max-w-md p-2  text-white bg-[#154c79] rounded-lg font-bold hover:bg-transparent hover:text-[#154c79] transition-all duration-500
-            ${isloading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-          type="submit"
-          disabled={isloading}
-        >
-          {isloading ? "Sending..." : "Login"}
-        </button>
-
-        <div className="mt-4 text-[#154c79] font-medium">
-  Don’t have an account?{" "}
-  <Link to="/register" className="text-[#154c79] underline hover:text-blue-800">
-    Sign up
-  </Link>
-</div>
-      </form>
+        </p>
+      </div>
     </main>
   );
 };
