@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBell, FaPlus, FaClipboardList, FaUsers, FaBoxes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [items, setItems] = useState([
-    { id: 1, type: 'Projector', available: true, image: '/images/projector.jpg' },
-    { id: 2, type: 'Speaker', available: false, image: '/images/speaker.jpg' }
-  ]);
+  const [items, setItems] = useState([]);
   const [notifications, setNotifications] = useState(2);
+  
+  useEffect(() => {
+    // Fetch items when component mounts
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('http://localhost:7000/api/items');
+        setItems(response.data); // assuming your backend returns an array of items
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      }
+    };
 
+    fetchItems();
+  }, []);
   const handleToggleAvailability = (id) => {
     setItems((prev) =>
       prev.map((item) =>
@@ -18,7 +29,6 @@ const AdminDashboard = () => {
       )
     );
   };
-
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
@@ -68,46 +78,39 @@ const AdminDashboard = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Manage Items</h1>
           <button
-            onClick={() => navigate('/add-item')}
+            onClick={() => navigate('/AddItem')}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700"
           >
             <FaPlus className="mr-2" />
             Add Item
-          </button>
+          </button> 
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white shadow-md rounded-xl overflow-hidden transition-transform transform hover:scale-105"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {items.map((item) => (
+          <div key={item.id} className="border p-4 rounded shadow">
+            <img
+              src={`http://localhost:7000/uploads/${item.image}`}
+              
+              alt={item.name}
+              className="w-full h-40 object-cover mb-2"
+            />
+            <h2 className="text-xl font-semibold">{item.name}</h2>
+            <p className="text-gray-600">{item.type}</p>
+            <p className={`mt-2 ${item.available ? 'text-green-500' : 'text-red-500'}`}>
+              {item.available ? 'Available' : 'Not Available'}
+            </p>
+            <button
+              onClick={() => handleToggleAvailability(item.id)}
+              className="mt-2 px-4 py-1 bg-yellow-500 text-white rounded"
             >
-              <img
-                src={item.image}
-                alt={item.type}
-                className="w-full h-40 object-cover"
-              />
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800">{item.type}</h3>
-                <p
-                  className={`mt-2 text-sm font-medium ${
-                    item.available ? 'text-green-600' : 'text-red-500'
-                  }`}
-                >
-                  {item.available ? 'Available' : 'Not Available'}
-                </p>
-                <button
-                  onClick={() => handleToggleAvailability(item.id)}
-                  className="mt-4 w-full bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-md text-sm text-gray-800"
-                >
-                  {item.available ? 'Mark Unavailable' : 'Mark Available'}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+              Toggle Availability
+            </button>
+          </div>
+        ))}
       </div>
     </div>
+      </div>
   );
 };
 

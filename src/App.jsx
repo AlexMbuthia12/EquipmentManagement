@@ -5,6 +5,7 @@ import MyBookings from "./pages/user/Orders/MyBookings";
 import { Toaster } from "react-hot-toast";
 import RegisterPage from "./pages/landingPage/RegisterPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AddItem from "./pages/admin/AddItem";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/AddItem" element={<AddItem />} />
         {/*<Route path="/login" element={<LoginPage />} />*/}
           <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="account/mybookings" element={<MyBookings />} />

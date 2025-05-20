@@ -5,6 +5,9 @@ const db = require('./db'); // Import your database module
 const app = express(); // Initialize the Express application
 const loginRoutes = require('./api/login'); // Import your login routes
 const registerRoutes = require('./api/register'); // Import your register routes
+const path = require('path');
+const itemRoutes = require('./api/items');
+
 
 app.use(cors()); // Enable CORS
 app.use(express.json()); // Parse JSON request bodies
@@ -12,6 +15,8 @@ app.use(express.json()); // Parse JSON request bodies
 // Use the routes
 app.use('/api', loginRoutes); // Makes /api/login available
 app.use('/api', registerRoutes); // Makes /api/register available
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/items', itemRoutes);
 
 // Start server
 app.listen(7000, () => {
