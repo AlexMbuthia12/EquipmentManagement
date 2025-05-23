@@ -1,45 +1,50 @@
+// router.jsx
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
+
 import ProtectedRoute from "./auth/ProtectedRoutes.jsx";
 import Layout from "./Layout.jsx";
 
 import NotfoundPage from "../NotFound.jsx";
 import PageLoader from "./PageLoader.jsx";
 import UnauthorizedPage from "../Unauthorized.jsx";
+import SignUp from "./pages/landingPage/SignUp.jsx";
 
-// admin routes
-
-const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
-
-// user routes
-const Dashboard = lazy(() => import("./pages/user/Dashboard/index"));
-const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings"));
-
-// general routes
+// Lazy imports
 const AuthPage = lazy(() => import("./pages/landingPage/LandingPage.jsx"));
+const RegisterPage = lazy(() => import("./pages/landingPage/RegisterPage.jsx"));
+const Dashboard = lazy(() => import("./pages/user/Dashboard/index.jsx"));
+const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
+const AddItem = lazy(() => import("./pages/admin/AddItem.jsx"));
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/", 
     element: <Layout />,
     errorElement: <NotfoundPage />,
     children: [
-      // unauthorised user
-
+      // General (unauthenticated)
+      {
+        path: "/",
+        element: (
+          <Suspense fallback={<PageLoader />}><AuthPage /></Suspense>
+        ),
+      },
+      {
+        path: "/SignUp",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <SignUp />
+          </Suspense>
+        ),
+      },
       {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
       },
 
-      {
-        path: "/",
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <AuthPage />
-          </Suspense>
-        ),
-      },
-
+      // User routes
       {
         path: "/dashboard",
         element: (
@@ -61,15 +66,19 @@ const router = createBrowserRouter([
         ),
       },
 
-      //admin routes
+      // Admin routes
       {
-        path: "/admin/dashboard",
+      path: "/admin/AdminDashboard",
+element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense></ProtectedRoute>),
+      },
+      {
+        path: "/admin/additem",
         element: (
-          // <ProtectedRoute role="admin">
-          <Suspense fallback={<PageLoader />}>
-            <AdminDashboard />
-          </Suspense>
-          // </ProtectedRoute>
+          <ProtectedRoute role="admin">
+            <Suspense fallback={<PageLoader />}>
+              <AddItem />
+            </Suspense>
+          </ProtectedRoute>
         ),
       },
     ],

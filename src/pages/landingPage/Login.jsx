@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ← add this at the top (with your imports)
+import { useNavigate } from "react-router-dom";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -9,16 +9,19 @@ const Login = ({ onForgot }) => {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
 
-  const [isloading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginAsAdmin, setLoginAsAdmin] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error for that field
+    // Clear field-specific error on change
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -28,24 +31,18 @@ const Login = ({ onForgot }) => {
     }
   };
 
-  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
-
     const { email, password } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let newErrors = {};
 
-    if (!email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!emailRegex.test(email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
+    // Validate inputs
+    if (!email.trim()) newErrors.email = "Email is required.";
+    else if (!emailRegex.test(email)) newErrors.email = "Invalid email.";
 
-    if (!password) {
-      newErrors.password = "Password is required.";
-    }
+    if (!password) newErrors.password = "Password is required.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -59,25 +56,33 @@ const Login = ({ onForgot }) => {
       const response = await axios.post("http://localhost:7000/api/login", {
         email,
         password,
+        isAdmin: loginAsAdmin,
       });
+
+      const userData = response.data?.user;
+      const userRole = userData?.role;
+
+      if (loginAsAdmin && userRole !== "admin") {
+        toast.error("Access denied. This is not an admin account.");
+        return;
+      }
+      // ✅ Save user
+      localStorage.setItem("user", JSON.stringify(userData));
       toast.success("Login successful!");
 
-      setFormData({
-        email: "",
-        password: "",
-      });
+//       setErrors({}); // Clear old errors
+//       localStorage.setItem("user", JSON.stringify({
+//   ...userData,
+//   role: userData.role, // "admin" or "user"
+// }));
 
-      // clear the errors
-      setErrors({});
-
-      // redirect based in role
-      const userRole = response.data?.user?.role;
-
+      // Redirect based on role
       if (userRole === "admin") {
-        navigate("/admin");
+        navigate("/admin/AdminDashboard");
       } else {
         navigate("/user-dashboard");
       }
+
     } catch (error) {
       toast.error("Login failed. Check your credentials.");
       console.error(error);
@@ -111,7 +116,7 @@ const Login = ({ onForgot }) => {
           value={formData.email}
           placeholder="e.g. you@example.com"
           onChange={handleInputChange}
-          className={`p-4 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+          className={`p-4 border rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
             errors.email ? "border-red-500" : "border-[#006b3c]"
           }`}
         />
@@ -130,7 +135,7 @@ const Login = ({ onForgot }) => {
           name="password"
           placeholder="Enter your password"
           onChange={handleInputChange}
-          className={`p-3 border  rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
+          className={`p-3 border rounded-md outline-none focus:ring-2 focus:ring-[#006b3c] ${
             errors.password ? "border-red-500" : "border-[#006b3c]"
           }`}
         />
@@ -155,6 +160,17 @@ const Login = ({ onForgot }) => {
           <input type="checkbox" className="accent-[#006b3c] cursor-pointer" />
           Remember me
         </label>
+
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            className="accent-[#006b3c] cursor-pointer"
+            checked={loginAsAdmin}
+            onChange={() => setLoginAsAdmin(!loginAsAdmin)}
+          />
+          Log in as admin
+        </label>
+
         <button
           onClick={onForgot}
           type="button"
@@ -167,12 +183,12 @@ const Login = ({ onForgot }) => {
       {/* Submit */}
       <button
         type="submit"
-        disabled={isloading}
+        disabled={isLoading}
         className={`cursor-pointer mt-2 w-full bg-[#006b3c] text-white font-semibold py-2 rounded-md transition-all duration-300 hover:bg-transparent hover:text-[#006b3c] border-2 border-[#006b3c] ${
-          isloading && "opacity-50 cursor-not-allowed"
+          isLoading && "opacity-50 cursor-not-allowed"
         }`}
       >
-        {isloading ? "Logging in..." : "Log in"}
+        {isLoading ? "Logging in..." : "Log in"}
       </button>
     </form>
   );

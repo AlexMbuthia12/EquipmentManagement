@@ -12,12 +12,8 @@ const Layout = () => {
   return (
     <div className="">
       {!hideNav && <Navbar />}
-      <div className="">
-        {/* {!hideNav && <Sidebar />} */}
-
         <Outlet />
       </div>
-    </div>
   );
 };
 
