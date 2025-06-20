@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../../axios";
 
 const Login = ({ onForgot }) => {
   const [formData, setFormData] = useState({
@@ -53,14 +53,26 @@ const Login = ({ onForgot }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:7000/api/login", {
-        email,
-        password,
-        isAdmin: loginAsAdmin,
-      });
+      const response = await axios.post('/api/login', {
+  email,
+  password,
+  isAdmin: loginAsAdmin,
+});
 
-      const userData = response.data?.user;
-      const userRole = userData?.role;
+// ✅ Use a different variable name here
+const meResponse = await axios.get("/auth/me");
+const userData = meResponse.data;
+const userRole = userData.role;
+
+      // ✅ Immediately fetch user via /auth/me
+    // const response = await axios.get("/auth/me");
+    // const userData = response.data;
+
+    //   const userData = response.data?.user;
+    //   const userRole = userData?.role;
+      
+
+
 
       if (loginAsAdmin && userRole !== "admin") {
         toast.error("Access denied. This is not an admin account.");
@@ -80,7 +92,7 @@ const Login = ({ onForgot }) => {
       if (userRole === "admin") {
         navigate("/admin/AdminDashboard");
       } else {
-        navigate("/user-dashboard");
+        navigate("/user/UserDashBoard");
       }
 
     } catch (error) {

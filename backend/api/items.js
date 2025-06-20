@@ -20,17 +20,14 @@ router.post('/', upload.single('image'), (req, res) => {
 });
 
 // GET /api/items - fetch all items
-router.get('/', (req, res) => { 
-  const query = 'SELECT * FROM items';
-
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Error fetching items:', err);
-      return res.status(500).json({ message: 'Server error' });
-    }
-
+router.get('/', async (req, res) => {
+  try {
+    const [results] = await db.promise().query("SELECT * FROM items");
     res.json(results);
-  });
+  } catch (err) {
+    console.error('Error fetching items:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 module.exports = router;

@@ -59,7 +59,7 @@ const AddItem = () => {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success('Item added successfully!');
-      navigate('/admin');
+      navigate('/admin/AdminDashboard');
     } catch (err) {
       console.error(err);
       toast.error('Failed to add item');

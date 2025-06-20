@@ -1,10 +1,11 @@
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // ✅ Add this
 const db = require('../db');
 
-// login query 
-  router.post('/login', (req, res) => {
+// login route
+router.post('/login', (req, res) => {
   const { email, password, isAdmin } = req.body;
 
   const query = 'SELECT * FROM users WHERE email = ?';
@@ -27,7 +28,19 @@ const db = require('../db');
         return res.status(403).json({ message: 'Not authorized as admin' });
       }
 
-      // Success
+      // ✅ Generate JWT and set cookie
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: '7d',
+      });
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'Lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'production',
+      });
+
+      // ✅ Send user info (token is in cookie)
       res.json({
         message: 'Login successful',
         user: {
@@ -36,6 +49,7 @@ const db = require('../db');
           role: user.role
         }
       });
+
     } catch (error) {
       res.status(500).json({ message: 'Server error during login' });
     }
@@ -43,5 +57,3 @@ const db = require('../db');
 });
 
 module.exports = router;
-
-

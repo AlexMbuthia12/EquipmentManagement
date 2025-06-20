@@ -3,6 +3,7 @@ import { FaBell, FaPlus, FaClipboardList, FaUsers, FaBoxes } from 'react-icons/f
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import LogoutButton from '../../buttons/LogoutButton'; // adjust path
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -29,6 +30,22 @@ const AdminDashboard = () => {
       )
     );
   };
+  const handleLogout = async () => {
+  try {
+    // Call backend to clear the cookie
+    await axios.get('http://localhost:7000/auth/logout', { withCredentials: true });
+
+    // Clear local user state
+    localStorage.removeItem('user');
+
+    // Redirect to landing or login page
+    navigate('/');
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
+
+
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar */}
@@ -45,17 +62,16 @@ const AdminDashboard = () => {
             )}
           </button> */}
           <button
-  onClick={() => setNotifications(0)}
-  className="flex items-center mb-4 text-gray-700 hover:text-blue-600"
->
-  <FaBell className="mr-2" />
-  Booking Requests
-  {notifications > 0 && (
-    <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
-      {notifications}
-    </span>
-  )}
-</button>
+            onClick={() => setNotifications(0)} 
+            className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
+            <FaBell className="mr-2" />
+             Booking Requests
+            {notifications > 0 && (
+            <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
+            {notifications}
+            </span>
+             )}
+          </button>
 
           <button className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
             <FaClipboardList className="mr-2" />
@@ -78,7 +94,15 @@ const AdminDashboard = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Manage Items</h1>
           <button
-            onClick={() => navigate('/AddItem')}
+            onClick={() => navigate('../user/UserDashBoard')}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700"
+          >
+            <FaPlus className="mr-2" />
+            User
+          </button> 
+          
+          <button
+            onClick={() => navigate('/admin/additem')}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700"
           >
             <FaPlus className="mr-2" />
@@ -109,8 +133,9 @@ const AdminDashboard = () => {
           </div>
         ))}
       </div>
+      <LogoutButton />
     </div>
-      </div>
+</div>
   );
 };
 

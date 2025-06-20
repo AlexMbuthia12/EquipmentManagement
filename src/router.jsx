@@ -13,10 +13,11 @@ import SignUp from "./pages/landingPage/SignUp.jsx";
 // Lazy imports
 const AuthPage = lazy(() => import("./pages/landingPage/LandingPage.jsx"));
 const RegisterPage = lazy(() => import("./pages/landingPage/RegisterPage.jsx"));
-const Dashboard = lazy(() => import("./pages/user/Dashboard/index.jsx"));
+const Dashboard = lazy(() => import("./pages/user/index.jsx"));
 const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
 const AddItem = lazy(() => import("./pages/admin/AddItem.jsx"));
+const UserDashBoard = lazy(() => import("./pages/user/UserDashBoard.jsx"));
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,18 @@ element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><Admi
           </ProtectedRoute>
         ),
       },
+
+      {
+        path: "/user/UserDashBoard",
+        element: (
+          <ProtectedRoute roles={['admin', 'user']}>
+            <Suspense fallback={<PageLoader />}>
+              <UserDashBoard/>
+            </Suspense>
+           </ProtectedRoute>
+        ),
+      }
+
     ],
   },
 ]);

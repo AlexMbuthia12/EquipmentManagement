@@ -1,0 +1,63 @@
+[33me16d8db[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update API endpoints and input handling in Login, SignUp, and ItemService for consistency
+[33m93b67c4[m changed login username to email
+[33mf4881d9[m removed user role,status from registration endpoint, will be autofilled
+[33m2a3341e[m Update API endpoints in Login, SignUp, and ItemService for consistency
+[33m1986dfa[m Merge branch 'main' of github.com:CleopasMMuchiri/EquipmentBooking
+[33m93618c2[m Refactor item handling in EquipmentSystem and ItemService for consistency and clarity
+[33m357dfd4[m Remove venv from version control and resolve merge conflict
+[33m39dce8a[m Add CORS middleware to enable cross-origin requests
+[33m7cfd38a[m remove virtual environment files and update pyvenv configuration for Python 3.12.3
+[33m8bdf94e[m Add ManageItems component and ItemService for API interactions
+[33m4df04af[m implemented new db
+[33me4d845d[m remove venv
+[33m1741b74[m Admin pages changed added components folder which has the reusable components added pagination added filterbar added statsgroupcard added datatable added breadcrumbs moved navbar moved footer added usePagination added useFilters added authcontext - temporary will be later removed
+[33m91cd031[m admin updated
+[33m5c95675[m git ignore updated to prevent python cache files from version control
+[33mc1f5417[m Remove Python cache files from version control
+[33m5077904[m nothing to commit
+[33m8f864ed[m Admin Dasboard
+[33mc011b9c[m new db structure
+[33mbb80113[m setup /backend_fapi/readme.md
+[33m864dc94[m removed pushed venvs, users to build their own
+[33m6d2bc53[m \n
+[33m175a5ad[m added backend_fapi requirements.txt
+[33m7912080[m add linux venv
+[33me256bf6[m add fastapi backend
+[33me408594[m added gitignore file
+[33mb8e310d[m Fixed profile page
+[33m77efcee[m user dashboard ,history page and
+[33m204ae15[m Merge pull request #4 from CleopasMMuchiri/merge-with-design
+[33m9f9e9d5[m[33m ([m[1;31morigin/merge-with-design[m[33m)[m Merge pull request #3 from CleopasMMuchiri/main
+[33mbe9b60e[m Merge branch 'main' of github.com:CleopasMMuchiri/EquipmentBooking
+[33mf591744[m added history page
+[33m283782d[m Merge pull request #2 from CleopasMMuchiri/merge-with-design
+[33m22314e3[m form updated with logic and design
+[33made0701[m[33m ([m[1;31morigin/forms-changed[m[33m)[m form designs changed
+[33mfe9e8e9[m[33m ([m[1;31morigin/admin-dashBoard[m[33m)[m added register page, added admin dashboard, added backend register and login apis
+[33m949b71b[m[33m ([m[1;31morigin/routes-changes[m[33m)[m route updating and fixing
+[33mbea677b[m Merge branch 'main' of https://github.com/CleopasMMuchiri/EquipmentBooking into routes-changes
+[33mea52bf3[m changed the routes
+[33me782614[m Added footer and added collection
+[33mc2d8816[m profile  page
+[33mebac832[m redirects
+[33m8f61897[m logo
+[33m41f6c41[m Notification component
+[33m081e604[m navigation link
+[33m925c909[m search component added
+[33m0a414b6[m search
+[33m841fa06[m landing page created
+[33md1d8eda[m login page created
+[33mcf36c42[m navbar
+[33me5db2ed[m navbar
+[33ma3d1cd8[m my bookings
+[33m8672c6d[m page  redefinings
+[33me0860a5[m my bookings page
+[33m1031a01[m my orders
+[33m9d19bda[m nothing to commit
+[33m507663d[m my bookings page
+[33mf63ebe5[m notfound page added
+[33mb3be8e0[m Created User Dashboard
+[33m4ed7696[m set up project directory
+[33m926d4b1[m Merge pull request #1 from CleopasMMuchiri/master
+[33m9596c28[m[33m ([m[1;31morigin/master[m[33m)[m change of package installer
+[33mad857a9[m first push

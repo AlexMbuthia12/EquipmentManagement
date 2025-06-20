@@ -1,4 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function NotfoundPage() {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user?.role === 'admin') {
+        navigate('/admin/AdminDashboard');
+      } else if (user?.role === 'user') {
+        navigate('/user/UserDashBoard'); // or your specific user dashboard path
+      } else {
+        navigate('/'); // fallback
+      }
+    } catch {
+      navigate('/'); // fallback if error parsing or no user
+    }
+  };
+
   return (
     <main className="relative grid min-h-screen place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8 overflow-hidden">
       {/* Background circle */}
@@ -13,12 +33,12 @@ export default function NotfoundPage() {
           Sorry, we couldn’t find the page you’re looking for.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <a
-            href="/"
+          <button
+            onClick={handleGoBack}
             className="rounded-md bg-[#006b3c] px-4 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#006b3c]/80 transition"
           >
-            Go back home
-          </a>
+            Go Back
+          </button>
           <a
             href="#"
             className="text-sm font-semibold text-[#006b3c] group hover:underline transition"
