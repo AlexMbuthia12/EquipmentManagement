@@ -18,7 +18,8 @@ const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
 const AddItem = lazy(() => import("./pages/admin/AddItem.jsx"));
 const UserDashBoard = lazy(() => import("./pages/user/UserDashBoard.jsx"));
-
+const BookingPage = lazy(() => import("./pages/user/BookingPage.jsx"));
+const BookingRequestsPage = lazy(() => import("./pages/admin/BookingRequestsPage.jsx"));
 const router = createBrowserRouter([
   {
     path: "/", 
@@ -92,8 +93,27 @@ element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><Admi
             </Suspense>
            </ProtectedRoute>
         ),
-      }
-
+      },
+      {
+        path: "/book/:id",
+        element: (
+          <ProtectedRoute roles={['admin', 'user']}>
+            <Suspense fallback={<PageLoader />}>
+              <BookingPage />
+            </Suspense>
+           </ProtectedRoute>
+        )
+      },
+      {
+         path: '/admin/BookingRequestsPage',
+        element: (
+          <ProtectedRoute roles={['admin']}>
+            <Suspense fallback={<PageLoader />}>
+               <BookingRequestsPage />
+             </Suspense>
+          </ProtectedRoute>
+                  )
+       }
     ],
   },
 ]);

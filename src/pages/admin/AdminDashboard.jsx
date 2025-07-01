@@ -9,6 +9,19 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [notifications, setNotifications] = useState(2);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const res = await axios.get('http://localhost:7000/api/bookings/count');
+        setNotifications(res.data.count);
+      } catch (err) {
+        console.error('Failed to fetch notification count');
+      }
+    };
+
+    fetchNotifications();
+  }, []);
   
   useEffect(() => {
     // Fetch items when component mounts
@@ -62,16 +75,19 @@ const AdminDashboard = () => {
             )}
           </button> */}
           <button
-            onClick={() => setNotifications(0)} 
-            className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
-            <FaBell className="mr-2" />
-             Booking Requests
-            {notifications > 0 && (
-            <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
-            {notifications}
-            </span>
+              onClick={() => {
+              setNotifications(0); // Reset count
+              navigate('/admin/BookingRequestsPage'); // Go to booking requests page
+              }}
+               className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
+             <FaBell className="mr-2" />
+              Booking Requests
+             {notifications > 0 && (
+               <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
+                {notifications}
+               </span>
              )}
-          </button>
+           </button>
 
           <button className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
             <FaClipboardList className="mr-2" />

@@ -10,6 +10,7 @@ const registerRoutes = require('./api/register'); // Import your register routes
 const path = require('path');
 const itemRoutes = require('./api/items');
 const authRoutes = require('./routes/auth');
+const bookingRoutes = require('./routes/bookings');
 
 const app = express(); // Initialize the Express application
 app.use(cors({
@@ -25,6 +26,7 @@ app.use('/api', registerRoutes); // Makes /api/register available
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/items', itemRoutes);
 app.use('/auth', authRoutes);
+app.use('/api/bookings', bookingRoutes);
 // Start server
 app.listen(7000, () => {
   console.log('🚀 Backend running on http://localhost:7000');

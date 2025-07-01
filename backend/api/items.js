@@ -30,4 +30,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /api/items/:id - fetch one item by ID
+router.get('/:id', async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const [rows] = await db.promise().query('SELECT * FROM items WHERE id = ?', [itemId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    res.json(rows[0]); // return the single item
+  } catch (err) {
+    console.error('Error fetching item by ID:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

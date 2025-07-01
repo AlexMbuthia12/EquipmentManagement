@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import LogoutButton from '../../buttons/LogoutButton'; // adjust path
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -57,26 +60,39 @@ export default function HomePage() {
               Welcome to Muranga County Goverment Equipment Management System!
             </h2>
           </div>
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {items.map((item) => (
+    <div
+      key={item._id}
+      className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
+    >
+      <img
+        src={`http://localhost:7000/uploads/${item.image}`}
+        alt={item.name}
+        className="h-40 w-full object-cover rounded mb-3"
+      />
+      <h3 className="text-lg font-semibold mb-1">{item.name}</h3>
+      <p className="text-sm text-gray-500 mb-2">{item.type}</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
-              >
-                <img
-                  src={`http://localhost:7000/uploads/${item.image}`}
-                  alt={item.name}
-                  className="h-40 w-full object-cover rounded mb-3"
-                />
-                <h3 className="text-lg font-semibold mb-1">{item.name}</h3>
-                <p className="text-sm text-gray-500 mb-2">{item.type}</p>
-                <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
-                  View Details
-                </button>
-              </div>
-            ))}
-          </div>
+      {item.available ? (
+        <button
+          onClick={() => navigate(`/book/${item.id}`)}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Book Now
+        </button>
+      ) : (
+        <button
+          disabled
+          className="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
+        >
+          Unavailable
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+           <LogoutButton />
         </main>
       </div>
 
