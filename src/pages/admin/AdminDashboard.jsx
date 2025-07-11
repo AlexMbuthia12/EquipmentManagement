@@ -8,20 +8,20 @@ import LogoutButton from '../../buttons/LogoutButton'; // adjust path
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
-  const [notifications, setNotifications] = useState(2);
+  //const [notifications, setNotifications] = useState(2);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const res = await axios.get('http://localhost:7000/api/bookings/count');
-        setNotifications(res.data.count);
-      } catch (err) {
-        console.error('Failed to fetch notification count');
-      }
-    };
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     try {
+  //       const res = await axios.get('http://localhost:7000/api/bookings/count');
+  //       setNotifications(res.data.count);
+  //     } catch (err) {
+  //       console.error('Failed to fetch notification count');
+  //     }
+  //   };
 
-    fetchNotifications();
-  }, []);
+  //   fetchNotifications();
+  // }, []);
   
   useEffect(() => {
     // Fetch items when component mounts
@@ -61,19 +61,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
+      {/* Sidebar 
       <div className="w-64 bg-white p-6 shadow-md flex flex-col justify-between">
         <div>
           <h2 className="text-2xl font-bold mb-6 text-blue-600">Admin Panel</h2>
-          {/* <button className="flex items-center mb-4 text-gray-700 hover:text-blue-600">
-            <FaBell className="mr-2" />
-            Booking Requests
-            {notifications > 0 && (
-              <span className="ml-2 bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
-                {notifications}
-              </span>
-            )}
-          </button> */}
           <button
               onClick={() => {
               setNotifications(0); // Reset count
@@ -103,14 +94,14 @@ const AdminDashboard = () => {
           </button>
         </div>
         <footer className="text-xs text-gray-400 mt-6">© 2025 Institute Admin</footer>
-      </div>
+      </div>*/}
 
       {/* Main Content */}
       <div className="flex-1 p-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold text-gray-800">Manage Items</h1>
           <button
-            onClick={() => navigate('../user/UserDashBoard')}
+            onClick={() => navigate('/user/UserDashBoard')}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-700"
           >
             <FaPlus className="mr-2" />

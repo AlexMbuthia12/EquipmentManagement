@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useNotification } from '../../auth/NotificationContext';
 
 const BookingPage = () => {
   const { id } = useParams(); // item ID from URL
@@ -11,6 +12,7 @@ const BookingPage = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { fetchNotificationCount } = useNotification();
 
   // Fetch item details
   useEffect(() => {
@@ -49,6 +51,7 @@ const BookingPage = () => {
 
       toast.success('Booking request sent');
       navigate('/user/UserDashBoard'); // or wherever you want to redirect
+      fetchNotificationCount(); // right after routing, update count
     } catch (err) {
       console.error(err);
       toast.error('Booking failed');

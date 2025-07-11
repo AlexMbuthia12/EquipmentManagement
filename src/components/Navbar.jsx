@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Bell,
-  Search,
-  User,
-  Menu,
-  X
-} from "lucide-react";
-import SearchComponent from "../Search/index"
-import NotificationComponent from "../Notification/index"
+import {Bell,Search,User,Menu,X } from "lucide-react";
+import SearchComponent from "./Search"
+import NotificationComponent from "./Notification"
+import { HelpCircle } from "lucide-react";
+import { useAuth } from "../auth/AuthContext";
+import logo from '../assets/images/logo.png';
+import useCurrentUser from '../hooks/useCurrentUser';
+
+
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const { user, loading } = useCurrentUser();
+  //const { user } = useAuth(); // assuming user has .role
+    // ✅ Log the user here
+    if (loading) return null; // or a loading spinner
+  console.log("Current user:", user);
+  const homePath = user?.role === "admin" ? "/admin/AdminDashboard" : "/user/UserDashBoard";
   const navLinks = [
-    { name: "Dashboard", path: "/Dashboard" },
-    { name: "My Bookings", path: "/account/mybookings", badge: 3 },
+    {
+    name: "Home",
+    path: homePath,
+  },
+    { name: "My Bookings", path: "/user/mybookings"},
     { name: "History", path: "/history" },
     { name: "Profile", path: "/profile", mobileOnly: true },
     { name: "Settings", path: "/settings", mobileOnly: true },
@@ -31,14 +39,16 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
-                <div className="w-8 h-8 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center mr-2">
-                  <span className="text-white font-bold">AF</span>
-                </div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">ASSETFLOW</h1>
-              </Link>
-            </div>
+            <div className="flex-shrink-0">
+      <Link to={homePath}>
+        <img
+          src={logo}
+          alt="Logo"
+          className="h-10 w-auto sm:h-12 md:h-14 lg:h-16 transition-all duration-300"
+        />
+      </Link>
+    </div>
+
             
             {/* Desktop Navigation */}
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -74,6 +84,15 @@ export default function Navbar() {
               <Search size={18} className="text-gray-400" />
             </div> */}
             <SearchComponent/>
+
+            <Link
+  to="/help"
+  className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+  title="Help"
+>
+  <HelpCircle size={20} className="text-blue-500" />
+  <span>Help</span>
+</Link>
             
             {/* Notification & User */}
             <div className="flex items-center space-x-4">

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import { useNotification } from '../../auth/NotificationContext';
 const BookingRequestsPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState({}); // keyed by booking ID
+  const { fetchNotificationCount } = useNotification();
+
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -23,18 +25,21 @@ const BookingRequestsPage = () => {
   }, []);
 
   const handleAction = async (id, status) => {
-    try {
-      await axios.put(`http://localhost:7000/api/bookings/${id}`, {
-        status,
-        comment: comment[id] || ''
-      });
-      toast.success(`Request ${status}`);
-      setRequests((prev) => prev.filter((req) => req.id !== id));
+  try {
+    await axios.put(`http://localhost:7000/api/bookings/${id}`, {
+      status,
+      comment: comment[id] || ''
+    });
+    toast.success(`Request ${status}`);
+    // remove this booking from view
+    setRequests((prev) => prev.filter((req) => req.id !== id));
+    // only fetch new notification count if a "pending" request was acted on
+    await fetchNotificationCount();
     } catch (err) {
-      console.error(err);
-      toast.error('Action failed');
+    console.error(err);
+    toast.error('Action failed');
     }
-  };
+   };
 
   if (loading) return <p className="text-center py-10">Loading...</p>;
 
@@ -59,7 +64,7 @@ const BookingRequestsPage = () => {
             />
             <div className="flex gap-2 mt-2">
               <button
-                onClick={() => handleAction(req.id, 'accepted')}
+                onClick={() => handleAction(req.id, 'approved')}
                 className="bg-green-600 text-white px-4 py-1 rounded"
               >
                 Accept

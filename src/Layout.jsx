@@ -1,6 +1,6 @@
 // components/layouts/Layout.jsx
 import { Outlet, useLocation } from "react-router-dom";
-import Navbar from "./pages/Both/Navbar/Navbar";
+import Navbar from "./components/Navbar";
 // import Sidebar from "../shared/Sidebar";
 
 const Layout = () => {

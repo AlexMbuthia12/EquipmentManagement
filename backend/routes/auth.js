@@ -13,10 +13,13 @@ router.get('/me', (req, res) => {
   }
 
   try {
+     // ✅ Log the secret before using it
+    console.log("JWT_SECRET:", process.env.JWT_SECRET); 
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
 
-    const query = 'SELECT id, username, email, role FROM users WHERE id = ?';
+    const query = 'SELECT id, userName, email, role FROM users WHERE id = ?';
 
     db.query(query, [userId], (err, results) => {
       if (err) return res.status(500).json({ message: 'Database error' });
@@ -27,6 +30,7 @@ router.get('/me', (req, res) => {
 
       const user = results[0];
       res.json(user);
+      
     });
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });

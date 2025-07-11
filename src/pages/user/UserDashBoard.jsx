@@ -22,7 +22,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
-      {/* Top Navbar */}
+      {/* Top Navbar 
       <header className="bg-white shadow-sm p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-orange-600">E-COMMERCE</h1>
         <input
@@ -35,23 +35,31 @@ export default function HomePage() {
           <span>Help</span>
           <span>Cart</span>
         </div>
-      </header>
+      </header>*/}
 
       {/* Sidebar and Main Content */}
       <div className="flex">
         <aside className="w-64 bg-white p-4 shadow-sm">
           <ul className="space-y-2 text-gray-700">
-            <li className="font-bold">Categories</li>
-            <li>Phones & Tablets</li>
-            <li>TVs & Audio</li>
-            <li>Appliances</li>
-            <li>Health & Beauty</li>
-            <li>Home & Office</li>
-            <li>Fashion</li>
-            <li>Computing</li>
-            <li>Gaming</li>
-            <li>Supermarket</li>
-          </ul>
+             <li className="flex items-center gap-4 text-lg font-semibold hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🏷️</span> Categories
+</li>
+<li className="flex items-center gap-4 text-lg font-semibold hover:text-blue-600 hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🏛️</span> Halls
+</li>
+<li className="flex items-center gap-4 text-lg font-semibold hover:text-green-600 hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🖥️</span> Appliances
+</li>
+<li className="flex items-center gap-4 text-lg font-semibold hover:text-red-600 hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🚗</span> Vehicles
+</li>
+<li className="flex items-center gap-4 text-lg font-semibold hover:text-emerald-600 hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🌳</span> Grounds
+</li>
+<li className="flex items-center gap-4 text-lg font-semibold hover:text-purple-600 hover:scale-105 transition duration-200">
+  <span className="w-6 h-6 inline-block">🖱️</span> Peripherals
+</li>
+</ul>
         </aside>
 
         <main className="flex-1 p-6">
@@ -96,10 +104,10 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* Flash Sale Footer */}
+      {/* Flash Sale Footer
       <footer className="bg-red-600 text-white text-center py-2 mt-6">
         Flash Sale | Time Left: 13h : 10m : 45s
-      </footer>
+      </footer> */}
     </div>
   );
 }

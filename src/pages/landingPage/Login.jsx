@@ -59,11 +59,13 @@ const Login = ({ onForgot }) => {
   isAdmin: loginAsAdmin,
 });
 
-// ✅ Use a different variable name here
+
+// ✅fetch user. Use a different variable name here
 const meResponse = await axios.get("/auth/me");
 const userData = meResponse.data;
 const userRole = userData.role;
 
+console.log(userData.role);
       // ✅ Immediately fetch user via /auth/me
     // const response = await axios.get("/auth/me");
     // const userData = response.data;
@@ -81,6 +83,7 @@ const userRole = userData.role;
       // ✅ Save user
       localStorage.setItem("user", JSON.stringify(userData));
       toast.success("Login successful!");
+      toast.success(`Welcome, ${userData.userName}!`);
 
 //       setErrors({}); // Clear old errors
 //       localStorage.setItem("user", JSON.stringify({

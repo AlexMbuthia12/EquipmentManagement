@@ -1,19 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../axios';
+import toast from 'react-hot-toast';
 
 const LogoutButton = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:7000/auth/logout', {
-        withCredentials: true, // ensures cookie is included
-      });
-
-      // Remove user data from localStorage (optional but safe)
+      await axios.get('/auth/logout');
+// Remove user data from localStorage (optional but safe)
       localStorage.removeItem('user');
-
+      // ✅ Show toast notification
+    toast.success("Successfully logged out");
       // Redirect to login or landing page
       navigate('/');
     } catch (err) {

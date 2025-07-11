@@ -2,45 +2,64 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-import ProtectedRoute from "./auth/ProtectedRoutes.jsx";
+// Layouts and Guards
 import Layout from "./Layout.jsx";
+import ProtectedRoute from "./auth/ProtectedRoutes.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx"; // <-- Add this line
 
+// Pages and Components
 import NotfoundPage from "../NotFound.jsx";
-import PageLoader from "./PageLoader.jsx";
 import UnauthorizedPage from "../Unauthorized.jsx";
+import PageLoader from "./PageLoader.jsx";
 import SignUp from "./pages/landingPage/SignUp.jsx";
+import Profile from "./components/profile.jsx";
+import LogIn from "./pages/landingPage/Login.jsx";
 
 // Lazy imports
 const AuthPage = lazy(() => import("./pages/landingPage/LandingPage.jsx"));
 const RegisterPage = lazy(() => import("./pages/landingPage/RegisterPage.jsx"));
 const Dashboard = lazy(() => import("./pages/user/index.jsx"));
-const MyBookings = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
+const MyBookingss = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
 const AddItem = lazy(() => import("./pages/admin/AddItem.jsx"));
+const BookingRequestsPage = lazy(() => import("./pages/admin/BookingRequestsPage.jsx"));
 const UserDashBoard = lazy(() => import("./pages/user/UserDashBoard.jsx"));
 const BookingPage = lazy(() => import("./pages/user/BookingPage.jsx"));
-const BookingRequestsPage = lazy(() => import("./pages/admin/BookingRequestsPage.jsx"));
+const MyBookings = lazy(() => import("./pages/user/MyBookings.jsx"));
+
+
+
 const router = createBrowserRouter([
   {
-    path: "/", 
+    path: "/",
     element: <Layout />,
     errorElement: <NotfoundPage />,
     children: [
-      // General (unauthenticated)
+      // Public routes
       {
         path: "/",
         element: (
-          <Suspense fallback={<PageLoader />}><AuthPage /></Suspense>
-        ),
-      },
-      {
-        path: "/SignUp",
-        element: (
           <Suspense fallback={<PageLoader />}>
-            <SignUp />
+            <AuthPage />
           </Suspense>
         ),
       },
+      // {
+      //   path: "/login",
+      //   element: (
+      //     <Suspense fallback={<PageLoader />}>
+      //       <LogIn />
+      //     </Suspense>
+      //   ),
+      // },
+      // {
+      //   path: "/SignUp",
+      //   element: (
+      //     <Suspense fallback={<PageLoader />}>
+      //       <SignUp />
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
@@ -62,23 +81,7 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute role="user">
             <Suspense fallback={<PageLoader />}>
-              <MyBookings />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
-
-      // Admin routes
-      {
-      path: "/admin/AdminDashboard",
-element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><AdminDashboard /></Suspense></ProtectedRoute>),
-      },
-      {
-        path: "/admin/additem",
-        element: (
-          <ProtectedRoute role="admin">
-            <Suspense fallback={<PageLoader />}>
-              <AddItem />
+              <MyBookingss />
             </Suspense>
           </ProtectedRoute>
         ),
@@ -89,11 +92,34 @@ element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><Admi
         element: (
           <ProtectedRoute roles={['admin', 'user']}>
             <Suspense fallback={<PageLoader />}>
-              <UserDashBoard/>
+              <UserDashBoard />
             </Suspense>
-           </ProtectedRoute>
+          </ProtectedRoute>
         ),
       },
+
+      {
+        path: "/user/mybookings",
+        element: (
+          <ProtectedRoute roles={['admin', 'user']}>
+            <Suspense fallback={<PageLoader />}>
+              <MyBookings />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute roles={['admin', 'user']}>
+            <Suspense fallback={<PageLoader />}>
+              <Profile />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+
       {
         path: "/book/:id",
         element: (
@@ -101,19 +127,45 @@ element: (<ProtectedRoute role="admin"><Suspense fallback={<PageLoader />}><Admi
             <Suspense fallback={<PageLoader />}>
               <BookingPage />
             </Suspense>
-           </ProtectedRoute>
-        )
-      },
-      {
-         path: '/admin/BookingRequestsPage',
-        element: (
-          <ProtectedRoute roles={['admin']}>
-            <Suspense fallback={<PageLoader />}>
-               <BookingRequestsPage />
-             </Suspense>
           </ProtectedRoute>
-                  )
-       }
+        ),
+      },
+
+      // 🔹 Admin Layout + Nested Protected Admin Routes
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute role="admin">
+            <AdminLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            path: "AdminDashboard",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <AdminDashboard />
+              </Suspense>
+            ),
+          },
+          {
+            path: "additem",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <AddItem />
+              </Suspense>
+            ),
+          },
+          {
+            path: "BookingRequestsPage",
+            element: (
+              <Suspense fallback={<PageLoader />}>
+                <BookingRequestsPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
     ],
   },
 ]);

@@ -64,7 +64,7 @@ router.put('/:id', async (req, res) => {
     // Optional: if accepted, mark item as unavailable
     if (status === 'accepted') {
       await db.promise().query(
-        'UPDATE items SET available = 0 WHERE id = (SELECT itemId FROM bookings WHERE id = ?)',
+        'UPDATE items SET available = 0 WHERE id = (SELECT item_id FROM bookings WHERE id = ?)',
         [bookingId]
       );
     }
@@ -84,6 +84,80 @@ router.get('/count', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error getting count' });
+  }
+});
+
+//Fetch bookings by userId for to display my bookings
+// GET /api/bookings/user/:id
+router.get('/user/:id', async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const [rows] = await db.promise().query(`
+  SELECT b.id, b.status, b.message, b.comment, i.name AS item_name
+  FROM bookings b
+  JOIN items i ON b.item_id = i.id
+  WHERE b.user_id = ?
+  ORDER BY b.created_at DESC
+`, [userId]);
+
+
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch user bookings" });
+  }
+}); 
+
+// Get bookings for the current user (based on token)
+router.get('/me', (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized: No token found' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    const query = `
+      SELECT b.id, b.status, b.message, b.comment, i.name AS item_name
+      FROM bookings b
+      JOIN items i ON b.item_Id = i.id
+      WHERE b.user_Id = ?
+      ORDER BY b.created_at DESC
+    `;
+
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Database error' });
+      }
+
+      res.json(results);
+    });
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+
+//Backend Route to Update/edit Booking Message
+// PUT /api/bookings/:id/message
+router.put('/:id/message', async (req, res) => {
+  const bookingId = req.params.id;
+  const { message } = req.body;
+
+  try {
+    await db.promise().query(
+      'UPDATE bookings SET message = ? WHERE id = ? AND status = "pending"',
+      [message, bookingId]
+    );
+
+    res.json({ message: 'Booking message updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to update message' });
   }
 });
 
