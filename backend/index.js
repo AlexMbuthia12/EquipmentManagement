@@ -27,6 +27,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/items', itemRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
+
+// ✅ Serve React frontend (client/build)
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// ✅ Catch-all route to serve React index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+});
+
 // Start server
 app.listen(7000, () => {
   console.log('🚀 Backend running on http://localhost:7000');
