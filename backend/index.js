@@ -20,6 +20,13 @@ app.use(cors({
 app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser());
 
+// ✅ Log incoming requests for debugging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+
 // Use the routes
 app.use('/api', loginRoutes); // Makes /api/login available
 app.use('/api', registerRoutes); // Makes /api/register available
@@ -28,14 +35,18 @@ app.use('/api/items', itemRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 
-// ✅ Serve React frontend (client/build)
-app.use(express.static(path.join(__dirname, 'client/build')));
+// // ✅ Serve React frontend (client/build)
+// app.use(express.static(path.join(__dirname, 'client/build')));
 
-// ✅ Catch-all route to serve React index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+// // ✅ Catch-all route to serve React index.html
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'client/build/index.html'));
+// });
+// ✅ Add this LAST — global error handler
+app.use((err, req, res, next) => {
+  console.error('❌ Unhandled error:', err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
 });
-
 // Start server
 app.listen(7000, () => {
   console.log('🚀 Backend running on http://localhost:7000');

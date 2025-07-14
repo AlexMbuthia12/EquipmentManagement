@@ -1,3 +1,29 @@
+// const mysql = require('mysql2');
+
+// // Replace with your actual values from freesqldatabase.com
+// const pool = mysql.createPool({
+//   host: "sql.freesqldatabase.com",     // ✅ Freesqldatabase host
+//   user: "sql3789931",                 // ✅ Your username
+//   password: "gWtruJYFk7",            // ✅ Your password
+//   database: "sql3789931",             // ✅ Database name
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0,
+// });
+
+// // Optional: test connection
+// pool.getConnection((err, connection) => {
+//   if (err) {
+//     console.error('❌ MySQL connection failed:', err);
+//   } else {
+//     console.log('✅ Connected to remote MySQL');
+//     connection.release();
+//   }
+// });
+
+// module.exports = pool;
+
+require('dotenv').config();
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
@@ -20,32 +46,6 @@ pool.getConnection((err, connection) => {
 });
 
 module.exports = pool;
-
-
-// const mysql = require('mysql2');
-
-// // Create connection pool
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database: "EQMGMT",
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// });
-
-// // Optional: test connection once to verify setup
-// pool.getConnection((err, connection) => {
-//   if (err) {
-//     console.error('❌ MySQL connection failed:', err);
-//   } else {
-//     console.log('✅ Connected to MySQL');
-//     connection.release(); // Always release manually acquired connections
-//   }
-// });
-
-// module.exports = pool; // Allows both callback and async/await usage
 
 
 
