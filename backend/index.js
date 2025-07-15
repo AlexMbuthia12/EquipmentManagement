@@ -50,5 +50,5 @@ app.use((err, req, res, next) => {
 // Start server
 app.listen(7000, () => {
   console.log('🚀 Backend running on http://localhost:7000');
-});
+});  
 
