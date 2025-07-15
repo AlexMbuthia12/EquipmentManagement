@@ -5,7 +5,7 @@ import SearchComponent from "./Search"
 import NotificationComponent from "./Notification"
 import { HelpCircle } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/llogo.png';
 import useCurrentUser from '../hooks/useCurrentUser';
 
 
