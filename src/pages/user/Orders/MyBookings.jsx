@@ -17,7 +17,6 @@
 //   Menu,
 //   X
 // } from "lucide-react";
-// import Navbar from "../../Both/Navbar/Navbar";
 
 // export default function MyBookings() {
 //   const [activeTab, setActiveTab] = useState("active");
