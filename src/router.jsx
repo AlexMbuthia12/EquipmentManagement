@@ -11,15 +11,14 @@ import AdminLayout from "./layouts/AdminLayout.jsx"; // <-- Add this line
 import NotfoundPage from "../NotFound.jsx";
 import UnauthorizedPage from "../Unauthorized.jsx";
 import PageLoader from "./PageLoader.jsx";
-import SignUp from "./pages/landingPage/SignUp.jsx";
+
 import Profile from "./components/profile.jsx";
-import LogIn from "./pages/landingPage/Login.jsx";
+
 
 // Lazy imports
 const AuthPage = lazy(() => import("./pages/landingPage/LandingPage.jsx"));
-const RegisterPage = lazy(() => import("./pages/landingPage/RegisterPage.jsx"));
 const Dashboard = lazy(() => import("./pages/user/index.jsx"));
-const MyBookingss = lazy(() => import("./pages/user/Orders/MyBookings.jsx"));
+
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.jsx"));
 const AddItem = lazy(() => import("./pages/admin/AddItem.jsx"));
 const BookingRequestsPage = lazy(() => import("./pages/admin/BookingRequestsPage.jsx"));
@@ -44,22 +43,6 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "/login",
-      //   element: (
-      //     <Suspense fallback={<PageLoader />}>
-      //       <LogIn />
-      //     </Suspense>
-      //   ),
-      // },
-      // {
-      //   path: "/SignUp",
-      //   element: (
-      //     <Suspense fallback={<PageLoader />}>
-      //       <SignUp />
-      //     </Suspense>
-      //   ),
-      // },
       {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
