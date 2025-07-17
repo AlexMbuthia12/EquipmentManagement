@@ -13,11 +13,26 @@ const authRoutes = require('./routes/auth');
 const bookingRoutes = require('./routes/bookings');
 
 const app = express(); // Initialize the Express application
-app.use(cors({
-  origin: 'http://localhost:5173', // your frontend
-  credentials: true
-}));
-app.use(express.json()); // Parse JSON request bodies
+// List of allowed origins
+const allowedOrigins = [
+  "http://localhost:4173",
+  "https://equipmentmanagement-h96sya2h9-alex-mbuthias-projects.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like curl or Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);app.use(express.json()); // Parse JSON request bodies
 app.use(cookieParser());
 
 // ✅ Log incoming requests for debugging

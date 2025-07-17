@@ -74,7 +74,7 @@ const SignUp = ({ setIsLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:7000/api/register", {
+      const response = await axios.post("/api/register", {
         userName,
         email,
         password,

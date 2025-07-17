@@ -1,33 +1,52 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from "@eslint/js";
+import globals from "globals";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
 
-export default [
-  { ignores: ['dist'] },
+export default defineConfig([
+  // 🟢 Common config for all files
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.{js,mjs,cjs,jsx}"],
+    plugins: { js },
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
-    },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      ecmaVersion: "latest",
+      sourceType: "module", // default to ESModules
     },
     rules: {
       ...js.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
     },
   },
-]
+
+  // 🔵 Backend override (Node.js - allow require)
+  {
+    files: ["backend/**/*.js"],
+    languageOptions: {
+      sourceType: "script", // treat as CommonJS
+      globals: globals.node,
+    },
+  },
+
+  // 🟣 Frontend override (React + JSX)
+  {
+    files: ["frontend/src/**/*.{js,jsx}"],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        sourceType: "module",
+      },
+      globals: {
+        ...globals.browser,
+      },
+    },
+    plugins: {
+      react: pluginReact,
+    },
+    rules: {
+      ...pluginReact.configs.recommended.rules,
+    },
+  },
+]);

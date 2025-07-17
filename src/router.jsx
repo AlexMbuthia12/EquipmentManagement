@@ -59,16 +59,7 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "/account/mybookings",
-        element: (
-          <ProtectedRoute role="user">
-            <Suspense fallback={<PageLoader />}>
-              <MyBookingss />
-            </Suspense>
-          </ProtectedRoute>
-        ),
-      },
+      
 
       {
         path: "/user/UserDashBoard",
