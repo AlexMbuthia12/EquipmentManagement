@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
 import LogoutButton from '../../buttons/LogoutButton'; // adjust path
 

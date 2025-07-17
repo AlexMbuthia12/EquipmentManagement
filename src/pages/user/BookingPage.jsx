@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axios';
 import toast from 'react-hot-toast';
 import { useNotification } from '../../auth/NotificationContext';
 
@@ -18,7 +18,7 @@ const BookingPage = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await axios.get(`http://localhost:7000/api/items/${id}`);
+        const res = await axios.get(`/api/items/${id}`);
         setItem(res.data);
       } catch (err) {
         console.error(err);
@@ -43,7 +43,7 @@ const BookingPage = () => {
       // Assuming you have user info in localStorage or AuthContext
       const userId = JSON.parse(localStorage.getItem('user'))?.id;
 
-      const res = await axios.post('http://localhost:7000/api/bookings', {
+      const res = await axios.post('/api/bookings', {
         itemId: id,
         userId,
         message

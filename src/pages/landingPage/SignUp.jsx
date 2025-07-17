@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../../axios";
 
 const SignUp = ({ setIsLogin }) => {
+  console.log("Base URL:", import.meta.env.VITE_API_BASE_URL);
+
   const [formData, setFormData] = useState({
     email: "",
     userName: "",

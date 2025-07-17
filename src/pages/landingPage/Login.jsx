@@ -57,24 +57,17 @@ const Login = ({ onForgot }) => {
   email,
   password,
   isAdmin: loginAsAdmin,
+  }, {
+  withCredentials: true,
 });
+console.log("Login response:", response);
 
-
-// ✅fetch user. Use a different variable name here
-const meResponse = await axios.get("/auth/me");
+// ✅fetch user. Use a different variable name here✅ Immediately fetch user via /auth/me
+const meResponse = await axios.get('/auth/me', { withCredentials: true });
 const userData = meResponse.data;
 const userRole = userData.role;
 
 console.log(userData.role);
-      // ✅ Immediately fetch user via /auth/me
-    // const response = await axios.get("/auth/me");
-    // const userData = response.data;
-
-    //   const userData = response.data?.user;
-    //   const userRole = userData?.role;
-      
-
-
 
       if (loginAsAdmin && userRole !== "admin") {
         toast.error("Access denied. This is not an admin account.");
