@@ -15,8 +15,10 @@ const bookingRoutes = require('./routes/bookings');
 const app = express(); // Initialize the Express application
 // List of allowed origins
 const allowedOrigins = new Set([
+  "http://localhost:5173",
   "http://localhost:4173",
   "https://equipmentmanagement-h96sya2h9-alex-mbuthias-projects.vercel.app",
+  "http://localhost:7000",
 ]);
 
 app.use(
@@ -63,7 +65,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 // Start server
-app.listen(7000, () => {
-  console.log('🚀 Backend running on http://localhost:7000');
-});  
+const PORT = process.env.PORT || 7000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Backend running on http://localhost:${PORT}`);
+});
+ 
 

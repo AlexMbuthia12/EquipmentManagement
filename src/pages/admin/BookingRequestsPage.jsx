@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import toast from 'react-hot-toast';
 import { useNotification } from '../../auth/NotificationContext';
 const BookingRequestsPage = () => {
@@ -12,12 +12,13 @@ const BookingRequestsPage = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await axios.get('http://localhost:7000/api/bookings');
+        const res = await axios.get('/api/bookings/all');
         setRequests(res.data);
       } catch (err) {
-        console.error(err);
-        toast.error('Failed to load booking requests');
-      } finally {
+  console.error('API Error:', err.response?.data || err.message);
+  toast.error(err.response?.data?.message || 'Failed to load booking requests');
+}
+ finally {
         setLoading(false);
       }
     };

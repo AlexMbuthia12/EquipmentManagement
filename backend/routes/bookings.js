@@ -14,6 +14,30 @@ router.get('/count', async (req, res) => {
   }
 });
 
+// 📌1.1 Admin: Get all bookings
+router.get('/all', async (req, res) => {
+  try {
+    const [rows] = await db.promise().query(`
+      SELECT 
+        b.id, 
+        b.status, 
+        b.message, 
+        b.comment, 
+        i.name AS item_name, 
+        u.userName AS user_name
+      FROM bookings b
+      JOIN items i ON b.item_id = i.id
+      JOIN users u ON b.user_id = u.id
+      ORDER BY b.created_at DESC
+    `);
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to fetch bookings' });
+  }
+});
+
+
 // 📌 2. Get bookings for logged-in user via token
 router.get('/me', (req, res) => {
   const token = req.cookies.token;

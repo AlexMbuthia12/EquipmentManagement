@@ -3,19 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { EyeClosed, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "../../axios";
+import { useAuth } from "../../auth/AuthContext"; 
 
 const Login = ({ onForgot }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
+  
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loginAsAdmin, setLoginAsAdmin] = useState(false);
 
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,7 +35,10 @@ const Login = ({ onForgot }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, password } = formData;
+// ✅ Confirm what Vite is injecting
+  console.log("Axios Base URL:", import.meta.env.VITE_API_BASE_URL);
+    
+  const { email, password } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     let newErrors = {};
@@ -66,6 +71,7 @@ console.log("Login response:", response);
 const meResponse = await axios.get('/auth/me', { withCredentials: true, });
 const userData = meResponse.data;
 const userRole = userData.role;
+setUser(userData); //manually ensure context updates so ProtectedRoutes and others know you're logged in
 
 console.log(userData.role);
 
@@ -97,7 +103,7 @@ console.log(userData.role);
     // } 
     catch (error) {
   const message =
-    error.response?.data?.message || "Login failed. Check your credentials.";
+    error.response?.data?.message || "Login failed! Check your credentials.";
   toast.error(message); // Show the message from backend
   console.error("Login error:", error);
 }

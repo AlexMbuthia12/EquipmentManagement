@@ -15,9 +15,11 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext"; // or wherever your auth is
 
 const ProtectedRoute = ({ role, roles, children }) => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (!user) return <Navigate to="/login" />;
+  if (loading) return <div>Loading...</div>; // Avoid premature redirects
+
+  if (!user) return <Navigate to="/" />;
 
   const allowedRoles = roles || (role ? [role] : []);
 
@@ -27,6 +29,7 @@ const ProtectedRoute = ({ role, roles, children }) => {
 
   return children;
 };
+
 
 
 export default ProtectedRoute;

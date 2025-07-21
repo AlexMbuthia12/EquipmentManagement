@@ -5,7 +5,7 @@ import SearchComponent from "./Search"
 import NotificationComponent from "./Notification"
 import { HelpCircle } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
-//import newlogo from "../assets/image/newlogo.png";
+import logo from "../assets/image/newlogo.png";
 import useCurrentUser from '../hooks/useCurrentUser';
 
 
@@ -23,7 +23,7 @@ export default function Navbar() {
     path: homePath,
   },
     { name: "My Bookings", path: "/user/mybookings"},
-    { name: "History", path: "/history" },
+    //{ name: "History", path: "/history" },
     { name: "Profile", path: "/profile", mobileOnly: true },
     { name: "Settings", path: "/settings", mobileOnly: true },
     { name: "Logout", path: "/logout", mobileOnly: true }
@@ -42,8 +42,8 @@ export default function Navbar() {
             <div className="flex-shrink-0">
       <Link to={homePath}>
         <img
-          //src={}
-          src="https://via.placeholder.com/150"
+          src={logo}
+          //src="https://via.placeholder.com/150"
           alt="Logo"
           className="h-10 w-auto sm:h-12 md:h-14 lg:h-16 transition-all duration-300"
         />
