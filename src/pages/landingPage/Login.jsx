@@ -63,7 +63,7 @@ const Login = ({ onForgot }) => {
 console.log("Login response:", response);
 
 // ✅fetch user. Use a different variable name here✅ Immediately fetch user via /auth/me
-const meResponse = await axios.get('/auth/me', { withCredentials: true });
+const meResponse = await axios.get('/auth/me', { withCredentials: true, });
 const userData = meResponse.data;
 const userRole = userData.role;
 
@@ -91,10 +91,18 @@ console.log(userData.role);
         navigate("/user/UserDashBoard");
       }
 
-    } catch (error) {
-      toast.error("Login failed. Check your credentials.");
-      console.error(error);
-    } finally {
+    }// catch (error) {
+    //   toast.error("Login failed. Check your credentials.");
+    //   console.error(error);
+    // } 
+    catch (error) {
+  const message =
+    error.response?.data?.message || "Login failed. Check your credentials.";
+  toast.error(message); // Show the message from backend
+  console.error("Login error:", error);
+}
+    
+    finally {
       setIsLoading(false);
     }
   };
